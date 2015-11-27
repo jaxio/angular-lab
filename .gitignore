@@ -1,4 +1,13 @@
+.celerio/
+.idea/
+*.iml
 *.class
+src/main/generated-java
+src/test/generated-java
+src/main/resources
+src/main/webapp
+src/main/config/celerio-maven-plugin/metadata.xml
+target/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
