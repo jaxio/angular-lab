@@ -8,6 +8,8 @@ src/main/resources
 src/main/webapp
 src/main/config/celerio-maven-plugin/metadata.xml
 target/
+bower_components/
+*.log
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
