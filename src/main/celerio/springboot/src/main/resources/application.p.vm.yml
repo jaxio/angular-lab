@@ -4,9 +4,6 @@ security:
         enabled: false
 
 spring:
-    data:
-      rest:
-        basePath: api
     datasource:
         driver-class-name: @jdbc.driver@
         url: @jdbc.url@
