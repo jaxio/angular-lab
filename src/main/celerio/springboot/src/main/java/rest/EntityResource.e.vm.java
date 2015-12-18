@@ -30,7 +30,7 @@ $output.require("org.springframework.web.bind.annotation.RestController")
 $output.require("org.springframework.web.bind.annotation.RequestMapping")
 
 @RestController
-@RequestMapping("/${entity.rest.var}")
+@RequestMapping("/api/${entity.model.vars}")
 public class $output.currentClass {
 
 }
