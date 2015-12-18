@@ -23,8 +23,14 @@ The generated application relies on:
 
 * Java 8
 * Maven 3.1.1
+* npm
+* bower
 
 # How to run it
+
+## Step 0: Retrieve frontend libraries
+
+    bower install
 
 ## Step 1: reverse the sample SQL schema and generate the source code
     
