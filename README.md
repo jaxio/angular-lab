@@ -1,17 +1,17 @@
-# Angular JS app sample
+# Generate an Angular JS Web App
 
 >>
 >> NOTE: This is still a work in progress, we are looking for feedbacks from Angular JS experts.
 >> 
 
-Reverse a [sample SQL schema](https://github.com/jaxio/javaee-lab/tree/master/src/main/sql/h2/01-create.sql) 
-and generate a full S-CRUD Java EE 7 web application.
+Reverse a [sample SQL schema](https://github.com/jaxio/angular-lab/blob/master/src/main/sql/h2/01-create.sql) 
+and generate a full S-CRUD SpringBoot/JPA/AngularJS Web Application.
 
 S-CRUD means: **S**earch, **C**reate, **R**ead, **U**pdate, **D**elete
 
 The code generation is done by [Celerio](http://www.jaxio.com/en/).
 
-The project uses its own code generation templates, see [src/main/celerio](https://github.com/jaxio/angular-lab/tree/master/src/celerio).
+The project uses its own code generation templates, see [src/main/celerio](https://github.com/jaxio/angular-lab/tree/master/src/main/celerio).
 
 The generated application relies on:
 
