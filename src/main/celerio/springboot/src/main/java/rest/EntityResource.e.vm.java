@@ -1,10 +1,3 @@
-## Copyright 2015 JAXIO http://www.jaxio.com
-##
-## Licensed under the Apache License, Version 2.0 (the "License");
-## you may not use this file except in compliance with the License.
-## You may obtain a copy of the License at
-##
-##    http://www.apache.org/licenses/LICENSE-2.0
 ##
 ## Unless required by applicable law or agreed to in writing, software
 ## distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +6,10 @@
 ## limitations under the License.
 ##
 $output.java($entity.rest)##
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 #if($entity.hasUniqueBigIntegerAttribute())
 $output.require("java.math.BigInteger")##
@@ -27,6 +24,7 @@ $output.require($enumAttribute)##
 #end
 
 $output.require($entity.repository)##
+$output.require("com.jaxio.demo.repository.search.*")##
 $output.require("java.util.List")##
 $output.require("java.net.URISyntaxException")##
 $output.require("java.net.URI")##
@@ -45,7 +43,11 @@ $output.require("org.springframework.data.domain.Pageable")##
 $output.require("org.springframework.data.domain.Page")##
 $output.require("org.springframework.http.HttpHeaders")##
 $output.require("org.springframework.http.HttpStatus")##
-
+$output.require("org.springframework.web.bind.annotation.RequestMapping")##
+$output.require("org.springframework.web.bind.annotation.RequestMethod")##
+$output.require("static org.elasticsearch.index.query.QueryBuilders.queryStringQuery")##
+$output.require("java.util.stream.Collectors")##
+$output.require("java.util.stream.StreamSupport")##
 
 @RestController
 @RequestMapping("/api/${entity.model.vars}")
@@ -55,6 +57,9 @@ public class $output.currentClass{
 
     @Inject
     private $entity.repository.type $entity.repository.var;
+    
+    @Inject
+    private ${entity.model.type}SearchRepository ${entity.model.var}SearchRepository;
 
     /**
      * Create a new $entity.model.type.
@@ -68,6 +73,7 @@ public class $output.currentClass{
             return ResponseEntity.badRequest().header("Failure","Cannot create ${entity.model.varUp} with existing ID").body(null);
         }
         $entity.model.type result = ${entity.repository.var}.save($entity.model.var);
+        ${entity.model.var}SearchRepository.save($entity.model.var);
         return ResponseEntity.created(new URI("/api/${entity.model.vars}/"+result.getId()))
             .body(result);
     }
@@ -84,6 +90,7 @@ public class $output.currentClass{
             return create(${entity.model.var});
         }
         $entity.model.type result = ${entity.repository.var}.save($entity.model.var);
+        ${entity.model.var}SearchRepository.save($entity.model.var);
         return ResponseEntity.ok()
             .body(result);
     }
@@ -124,6 +131,31 @@ public class $output.currentClass{
     public ResponseEntity<Void> delete(@PathVariable $entity.primaryKey.type $entity.primaryKey.var) throws URISyntaxException {
         log.debug("Delete by id $entity.model.varsUp : {}", $entity.primaryKey.var);
         ${entity.repository.var}.delete($entity.primaryKey.var);
+        ${entity.model.var}SearchRepository.delete($entity.primaryKey.var);
         return ResponseEntity.ok().build();
+    }
+    
+    /**
+     * Index all $entity.model.type.
+     */
+    @RequestMapping(value = "/indexAll",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public void indexAll${entity.model.varsUp}() {
+    	log.debug("REST request to index all $entity.model.varsUp");
+    	
+    	${entity.model.var}Repository.findAll().forEach(p -> ${entity.model.var}SearchRepository.index(p));
+    }
+    
+    /**
+     * Search with ElasticSearch.
+     */
+    @RequestMapping(value = "/search/{query}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<$entity.model.type> search${entity.model.type}s(@PathVariable String query) {
+        return StreamSupport
+            .stream(${entity.model.var}SearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .collect(Collectors.toList());
     }
 }

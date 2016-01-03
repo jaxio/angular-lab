@@ -12,26 +12,13 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 ##
-$output.java($entity.repository)##
+$output.java("com.jaxio.demo.repository.search", "${entity.model.type}SearchRepository")##
 
-#if ($entity.hasUniqueBigIntegerAttribute())
-$output.require("java.math.BigInteger")##
-#end
-#if ($entity.hasUniqueDateAttribute() || $entity.root.hasDatePk())
-$output.require("java.util.Date")##
-#end
 $output.require($entity.model)##
-$output.require($entity.root.primaryKey)##
-#foreach ($enumAttribute in $entity.uniqueEnumAttributes.list)
-$output.require($enumAttribute)##
-#end
-$output.require("org.springframework.data.jpa.repository.*")##
+$output.require("org.springframework.data.elasticsearch.repository.ElasticsearchRepository")##
 
 /**
- * Ceci est un test
- * @author bertrand
- *
+ * Spring Data ElasticSearch repository for the Report entity.
  */
-public interface $output.currentClass extends JpaRepository<$entity.model.type, $entity.root.primaryKey.type> {
-
+public interface ${output.currentClass} extends ElasticsearchRepository<$entity.model.type, $entity.root.primaryKey.type> {
 }

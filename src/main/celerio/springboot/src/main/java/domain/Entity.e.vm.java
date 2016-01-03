@@ -1,4 +1,3 @@
-## Copyright 2015 JAXIO http://www.jaxio.com
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
 ## you may not use this file except in compliance with the License.
@@ -16,6 +15,7 @@ $output.java($entity.model)##
 
 $output.require("java.util.logging.Logger")##
 $output.require("com.google.common.base.Objects")##
+$output.require("org.springframework.data.elasticsearch.annotations.Document")##
 
 #if($entity.hasComment())
 /**
@@ -51,6 +51,7 @@ $annotation
 #if($entity.isRoot())
 $output.require("java.io.Serializable")##
 $output.require("com.jaxio.jpa.querybyexample.Identifiable")##
+@Document(indexName = "${entity.model.var}")
 public#if ($output.isAbstract()) abstract#{end} class ${output.currentClass}${entity.spaceAndExtendsStatement} implements Identifiable<$entity.primaryKey.type>${entity.commaAndImplementedInterfaces}, Serializable {
 #else
 $output.require($entity.parent.model)##

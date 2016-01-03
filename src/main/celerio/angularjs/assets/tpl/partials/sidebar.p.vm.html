@@ -1,0 +1,37 @@
+$output.webapp("assets/tpl/partials", "sidebar.html")##
+<aside class="sidebar fixed">
+  <div class="brand-logo">
+    <div id="logo">
+      <div class="foot1"></div>
+      <div class="foot2"></div>
+      <div class="foot3"></div>
+      <div class="foot4"></div>
+    </div>
+    Angular-Lab
+  </div>
+  <div class="user-logged-in">
+    <div class="content">
+      <div class="user-name">ave-cesar&nbsp;<span class="text-muted f9">admin</span></div>
+      <div class="user-email">last@samurai.jp</div>
+      <div class="user-actions">
+        <a class="m-r-5" href="">settings</a> <a href="">logout</a>
+      </div>
+    </div>
+  </div>
+  <ul class="menu-links" ng-cloak>
+    <a menu-link href="#/dashboard" icon="md md-blur-on">Dashboard</a>
+    <li menu-toggle path="/apps" name="Entities" icon="md md-camera">
+      <a menu-link href="#/apps/author" name="Author">
+        <span id="todosCount" class="pull-right badge z-depth-0" ng-bind="todosCount"></span>
+        Author
+      </a>
+      <a menu-link href="#/apps/book" name="Book">
+        <span class="pull-right badge theme-primary-bg z-depth-0">9</span>
+        Book
+      </a>
+    </li>
+    <li menu-toggle path="/ui-elements" name="Administration" icon="md md-photo">
+      <a menu-link href="/swagger-ui.html">API</a>
+    </li>
+  </ul>
+</aside>
