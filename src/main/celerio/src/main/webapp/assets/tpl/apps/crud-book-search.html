@@ -1,0 +1,65 @@
+
+<div class="aside bs-docs-aside" tabindex="-1" role="dialog">
+  <div class="close">
+    <div class="btn btn-round btn-info" ng-click="$hide()"><i class="md md-close"></i></div>
+  </div>
+
+  <div class="aside-dialog">
+    <div class="aside-body bs-sidebar">
+
+      <form class="form-floating" novalidate="novalidate" ng-submit="startSearch(item)">
+        <fieldset>
+          <legend><span ng-bind-html="item.icon"></span> {{cmd}} {{settings.singular}} search</legend>
+
+          <div class="form-group filled">
+            <label class="control-label">Title</label>
+            <input type="text" class="form-control" ng-model="item.title" required>
+          </div>
+
+          <div class="form-group filled">
+            <label class="control-label">Author</label>
+            <ui-select ng-model="item.author" theme="select2" title="Choose an author" search-enabled="false" ng-disabled="!item.editing">
+                <ui-select-match placeholder="Choose an author">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="item in authors | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  <small ng-bind-html="item.id | highlight: $select.search"></small>
+                </ui-select-choices>
+             </ui-select>
+          </div>
+
+		  <div class="form-group filled">
+            <label class="control-label">Publication date</label>
+            <input type="text" class="form-control" ng-model="item.publicationDate" data-autoclose="1" bs-datepicker>
+          </div>
+		  
+		  <div class="form-group filled">
+            <label class="control-label">Price</label>
+            <input type="text" class="form-control" ng-model="item.price">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-lg btn-primary" >Search</button>
+          </div>
+
+        </fieldset>
+      </form>
+
+	  <form class="form-floating" novalidate="novalidate" ng-submit="startElasticSearch(item)">
+        <fieldset>
+      
+          <div class="form-group filled">
+            <label class="control-label">Query</label>
+            <input type="text" class="form-control" ng-model="item.query" required>
+          </div>
+          
+          <div class="form-group">
+            <button type="submit" class="btn btn-lg btn-primary" >Elastic Search</button>
+          </div>
+
+        </fieldset>
+      </form>
+          
+          
+    </div>
+  </div>
+</div>

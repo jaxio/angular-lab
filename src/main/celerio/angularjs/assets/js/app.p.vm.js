@@ -1054,7 +1054,7 @@ angular.module("app.constants", []).constant("APP", {
     version: "1.1.1"
 }), app.config(["${dollar}routeProvider", function(a) {
     a.when("/", {
-        templateUrl: "assets/tpl/dashboard.html"
+        templateUrl: "assets/tpl/dashboardCrud.html"
     }).when("/:folder/:tpl", {
         templateUrl: function(a) {
             return "assets/tpl/" + a.folder + "/" + a.tpl + ".html"
