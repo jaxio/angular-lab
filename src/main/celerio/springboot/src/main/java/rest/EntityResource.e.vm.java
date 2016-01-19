@@ -7,10 +7,6 @@
 ##
 $output.java($entity.rest)##
 
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 #if($entity.hasUniqueBigIntegerAttribute())
 $output.require("java.math.BigInteger")##
 #end
@@ -26,11 +22,13 @@ $output.require($enumAttribute)##
 $output.require($entity.repository)##
 $output.require("com.jaxio.demo.repository.search.*")##
 $output.require("java.util.List")##
+$output.require("java.util.stream.Stream")##
 $output.require("java.net.URISyntaxException")##
 $output.require("java.net.URI")##
 $output.require("java.util.Optional")##
 
 $output.require("javax.inject.Inject")##
+$output.require("javax.transaction.Transactional")##
 
 $output.require("org.slf4j.LoggerFactory")##
 $output.require("org.slf4j.Logger")##
@@ -45,6 +43,7 @@ $output.require("org.springframework.http.HttpHeaders")##
 $output.require("org.springframework.http.HttpStatus")##
 $output.require("org.springframework.web.bind.annotation.RequestMapping")##
 $output.require("org.springframework.web.bind.annotation.RequestMethod")##
+$output.require("import org.springframework.web.bind.annotation.PathVariable")##
 $output.require("static org.elasticsearch.index.query.QueryBuilders.queryStringQuery")##
 $output.require("java.util.stream.Collectors")##
 $output.require("java.util.stream.StreamSupport")##
@@ -132,6 +131,18 @@ public class $output.currentClass{
         log.debug("Delete by id $entity.model.varsUp : {}", $entity.primaryKey.var);
         ${entity.repository.var}.delete($entity.primaryKey.var);
         ${entity.model.var}SearchRepository.delete($entity.primaryKey.var);
+        return ResponseEntity.ok().build();
+    }
+    
+    /**
+     * Mass deletion.
+     */
+    @RequestMapping(value = "/mass/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable String[] id) throws URISyntaxException {
+        log.debug("Delete by id $entity.model.varsUp : {}", id);
+        Stream.of(id).forEach(item -> {${entity.repository.var}.delete(item); ${entity.model.var}SearchRepository.delete(item);}); 
+        
         return ResponseEntity.ok().build();
     }
     
