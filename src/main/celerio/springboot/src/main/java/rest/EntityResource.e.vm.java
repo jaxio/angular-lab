@@ -43,7 +43,7 @@ $output.require("org.springframework.http.HttpHeaders")##
 $output.require("org.springframework.http.HttpStatus")##
 $output.require("org.springframework.web.bind.annotation.RequestMapping")##
 $output.require("org.springframework.web.bind.annotation.RequestMethod")##
-$output.require("import org.springframework.web.bind.annotation.PathVariable")##
+$output.require("org.springframework.web.bind.annotation.PathVariable")##
 $output.require("static org.elasticsearch.index.query.QueryBuilders.queryStringQuery")##
 $output.require("java.util.stream.Collectors")##
 $output.require("java.util.stream.StreamSupport")##
@@ -139,7 +139,7 @@ public class $output.currentClass{
      */
     @RequestMapping(value = "/mass/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
-    public ResponseEntity<Void> delete(@PathVariable String[] id) throws URISyntaxException {
+    public ResponseEntity<Void> delete(@PathVariable $entity.primaryKey.type[] id) throws URISyntaxException {
         log.debug("Delete by id $entity.model.varsUp : {}", id);
         Stream.of(id).forEach(item -> {${entity.repository.var}.delete(item); ${entity.model.var}SearchRepository.delete(item);}); 
         

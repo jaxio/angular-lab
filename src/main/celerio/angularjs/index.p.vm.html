@@ -48,7 +48,7 @@ $output.webapp("index.html")##
     <div ng-include src="'assets/tpl/partials/sidebar.html'"></div>
     <div class="main-container">
       <div ng-include src="'assets/tpl/partials/topnav.html'"></div>
-      <div class="main-content" autoscroll="true" ng-cloak ng-view bs-affix-target init-ripples></div>
+      <div class="main-content" autoscroll="true" ng-cloak bs-affix-target init-ripples ui-view></div>
     </div>
   </main>
 
@@ -57,11 +57,15 @@ $output.webapp("index.html")##
    
    
   <script src="assets/js/vendors.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/app1.js"></script>
+  <script src="assets/js/app2.js"></script>
+  <script src="assets/js/directives.js"></script>
   
   <script src="assets/js/authorController.js"></script>
   <script src="assets/js/bookController.js"></script>
+  <script src="assets/js/bookStates.js"></script>
   
+  <script src="bower_components/angular-ui-router.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   
 </body>

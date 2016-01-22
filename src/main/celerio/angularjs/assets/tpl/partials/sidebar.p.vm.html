@@ -14,19 +14,19 @@ $output.webapp("assets/tpl/partials", "sidebar.html")##
       <div class="user-name">ave-cesar&nbsp;<span class="text-muted f9">admin</span></div>
       <div class="user-email">last@samurai.jp</div>
       <div class="user-actions">
-        <a class="m-r-5" href="">settings</a> <a href="">logout</a>
+        <a class="m-r-5" ui-sref="settings">settings</a> <a ui-sref="logout">logout</a>
       </div>
     </div>
   </div>
   <ul class="menu-links" ng-cloak>
     <a menu-link href="#/dashboard" icon="md md-blur-on">Dashboard</a>
     <li menu-toggle path="/apps" name="Entities" icon="md md-camera">
-      <a menu-link href="#/apps/author" name="Author">
+      <a ui-sref="author" name="Author">
         <span id="todosCount" class="pull-right badge z-depth-0" ng-bind="todosCount"></span>
         Author
       </a>
-      <a menu-link href="#/apps/book" name="Book">
-        <span class="pull-right badge theme-primary-bg z-depth-0">9</span>
+	  <a ui-sref="book" name="Book">
+        <span class="pull-right badge theme-primary-bg z-depth-0">15021</span>
         Book
       </a>
     </li>
