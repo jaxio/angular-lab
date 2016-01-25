@@ -6,8 +6,8 @@ $output.webapp("assets/tpl", "dashboard.html")##
 
       <div class="p-20 clearfix">
         <div class="pull-right">
-          <a href="pages/material-bird.html" target="_blank" class="btn btn-round-sm btn-link" bs-tooltip title="Play material bird"><i class="md md-games"></i></a>
-          <div class="btn btn-round-sm btn-link" bs-tooltip title="Upload media"><i class="md md-crop-original"></i></div>
+          
+          <div class="btn btn-round-sm btn-link" bs-tooltip title="Upload media" ng-click="showAlert()"><i class="md md-crop-original"></i></div>
           <div class="btn btn-round-sm btn-link" bs-tooltip title="Write new document"><i class="md md-insert-drive-file"></i></div>
           <div class="btn btn-round-sm btn-link" bs-tooltip title="Add new user"><i class="md md-person-add"></i></div>
         </div>
@@ -30,7 +30,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
                   </div>
                 </div>
 
-                <h4 class="no-margin white-text w600">Sales per day</h4>
+                <h4 class="no-margin white-text w600">Authors per day</h4>
                 <div class="f11" style="opacity:0.8">
                   <i class="md md-star-outline"></i> Latest 10 May, 10:00
                 </div>
@@ -53,7 +53,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
               <div class="card-content p-10">
                 <div class="row">
                   <div class="col-md-6 text-center" style="border-right: 1px ${pound}F0F0F0 solid;">
-                    <h3 class="no-margin w300">${dollar}4181,-</h3>
+                    <h3 class="no-margin w300">${pound}4181,-</h3>
                     <p class="grey-text w600">Total revenue</p>
                   </div>
                   <div class="col-md-6 text-center">
@@ -75,7 +75,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
                   </div>
                 </div>
 
-                <h4 class="no-margin white-text w600">Customers per day</h4>
+                <h4 class="no-margin white-text w600">Books per day</h4>
                 <div class="f11" style="opacity:0.8">
                   <i class="md md-star-outline"></i> Latest 10 May, 10:00
                 </div>
@@ -110,50 +110,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
 
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="card small">
-              <div class="green lighten-1 p-10">
-                <div class="pull-right">
-                  <div>
-                    <i class="md md-trending-up  text-rgb-5"></i>
-                    9%
-                  </div>
-                </div>
-
-                <h4 class="no-margin white-text w600">Newsletter signups</h4>
-                <div class="f11" style="opacity:0.8">
-                  <i class="md md-star-outline"></i> Latest 10 May, 10:00
-                </div>
-
-                <div class="p-10 p-t-30">
-                  <c3chart bindto-id="chart-line-3">
-                    <chart-column column-id="Signups"
-                                  column-values="{{chartData3}}"
-                                  column-type="line" />
-                    <chart-axis-y show="false" />
-                    <chart-axis-x show="false" />
-                    <chart-legend show-legend="false" />
-                    <chart-size chart-height="100px" />
-                    <chart-tooltip show-tooltip="true" />
-                    <chart-colors color-pattern="${pound}fff" />
-                  </c3chart>
-                </div>
-              </div>
-
-              <div class="card-content p-10">
-                <div class="row">
-                  <div class="col-md-6 text-center" style="border-right: 1px ${pound}F0F0F0 solid;">
-                    <h3 class="no-margin w300">1597</h3>
-                    <p class="grey-text w600">Monthly total</p>
-                  </div>
-                  <div class="col-md-6 text-center">
-                    <h3 class="no-margin w300">34 </h3>
-                    <p class="grey-text w600">Today total</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </div>
 
         <div class="row gutter-14">
@@ -170,7 +127,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
               </div>
 
               <div class="list-group" ng-init="(orders=[]).length=3;">
-                <a href class="list-group-item clearfix" ng-repeat="i in orders track by ${dollar}index">
+                <a href class="list-group-item clearfix" ng-repeat="i in orders track by ${pound}index">
                   <div class="pull-left m-r-10">
                     <img placeholder-img class="img-responsive" />
                   </div>
@@ -182,49 +139,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
 
           </div>
 
-          <div class="col-md-4">
-
-            <div class="panel panel-default left">
-              <div class="panel-heading">
-
-                <div class="pull-right">
-                  <a href="" class="btn btn-round-sm btn-link"
-                     bs-dropdown="dropdown"
-                     data-template="assets/tpl/partials/dropdown-list-example.html"
-                     data-animation="mat-grow-top-right">
-                    <i class="md md-more-vert"></i>
-                  </a>
-                </div>
-
-                <h2 class="panel-title grey-text">Server load</h2>
-                <h1 class="m-t-10 m-b-5 f30" ng-bind="serverLoad">82%</h1>
-                <div class="row">
-                  <div class="col-xs-6">
-                    <div class="progress m-b-5">
-                      <div class="progress-bar" style="width: {{serverLoad}}%;"></div>
-                    </div>
-                  </div>
-                </div>
-                <p class="small grey-text no-margin">4 of 8 cores used</p>
-              </div>
-              <div id="server-load-chart"></div>
-            </div>
-
-          </div>
-          <div class="col-md-3">
-
-            <div class="card">
-              <div class="card-image">
-                <img src="assets/img/photos/4.jpg" class="img-responsive" style="max-height:193px;" />
-                <div class="card-title">Super card</div>
-              </div>
-              <div class="card-content">
-                <div class="card-profile pull-right"><img src="assets/img/icons/ballicons/bill.svg" alt="" style="width:75px;"></div>
-                <p>I am a very simple card. I am good at containing small info.</p>
-              </div>
-            </div>
-
-          </div>
+          
         </div>
 
         <div class="row gutter-14">
@@ -259,9 +174,9 @@ $output.webapp("assets/tpl", "dashboard.html")##
               </div>
 
               <div class="list-group" ng-init="(comments=[]).length=2;">
-                <a href class="list-group-item clearfix" ng-repeat="i in comments track by ${dollar}index">
+                <a href class="list-group-item clearfix" ng-repeat="i in comments track by ${pound}index">
                   <div class="pull-left m-r-10">
-                    <i class="icon-circle {{theme_colors[${dollar}index]}}-border v-super"></i>
+                    <i class="icon-circle {{theme_colors[${pound}index]}}-border v-super"></i>
                   </div>
                   <div class="list-group-item-heading" placeholder-name></div>
                   <span class="list-group-item-text" placeholder-p></span>
@@ -351,41 +266,11 @@ $output.webapp("assets/tpl", "dashboard.html")##
             <todo-widget />
           </div>
 
-          <div class="col-lg-3 col-md-6">
-            <div class="card bg-facebook white-text">
-              <div class="card-content">
-                <div class="" style="min-height: 140px;">
-                  <h2 class="f18 lh-13 w300 no-margin white-text">Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.</h2>
-                  <h5 class="f11 no-margin blue-text lighten-4 p-b-25">10 April, 2016 Â· <i class="fa fa-globe"></i></h5>
-                </div>
-                <div class="pull-right p-5">
-                  <i class="fa fa-thumbs-o-up"></i> 3123 &nbsp;&nbsp;
-                  <i class="fa fa-comment-o"></i> 241
-                </div>
-                <i class="fa fa-facebook f18"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6">
-            <div class="card bg-twitter white-text">
-              <div class="card-content">
-                <div class="" style="min-height: 140px;">
-                  <h2 class="f18 lh-13 w300 no-margin white-text">You will not be punished for your anger, you will be punished by your anger.</h2>
-                  <h5 class="f11 no-margin blue-text lighten-4">10 April, 2016 @wisdom</h5>
-                </div>
-                <div class="pull-right p-5">
-                  <i class="fa fa-star-o"></i> 3123 &nbsp;&nbsp;
-                  <i class="fa fa-retweet"></i> 241
-                </div>
-                <i class="fa fa-twitter f18"></i>
-              </div>
-            </div>
-          </div>
+         
 
         </div>
 
-        <div class="grey-text small p-t-20" ng-cloak>Materialism by Theme-Guys - v{{APP.version}}</div>
+        <div class="grey-text small p-t-20" ng-cloak>Here your footer - v{{APP.version}}</div>
       </div>
     </div>
 
@@ -430,7 +315,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
               </tr>
               <tr>
                 <td>Weekly profits</td>
-                <td>${dollar}4181,-</td>
+                <td>${pound}4181,-</td>
                 <td><i class="md md-arrow-drop-up green-text"></i></td>
               </tr>
               <tr>
@@ -554,7 +439,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
             <div role="tabpanel" class="tab-pane" ng-class="{active: actionTab==2}">
 
               <ul class="timeline" ng-init="(rows=[]).length=5;">
-                <li ng-repeat="i in rows track by ${dollar}index">
+                <li ng-repeat="i in rows track by ${pound}index">
                   <div class="timeline-badge"><img placeholder-img class="img-responsive" /></div>
                   <div class="timeline-panel">
                     <div class="timeline-heading">
@@ -572,7 +457,7 @@ $output.webapp("assets/tpl", "dashboard.html")##
             <div role="tabpanel" class="tab-pane" ng-class="{active: actionTab==3}">
 
               <ul class="timeline" ng-init="(rows=[]).length=5;">
-                <li ng-repeat="i in rows track by ${dollar}index">
+                <li ng-repeat="i in rows track by ${pound}index">
                   <div class="timeline-badge" placeholder-icon></div>
                   <div class="timeline-panel">
                     <div class="timeline-heading">

@@ -222,7 +222,7 @@ hideForm = function(aside) {
 /** Permet de fermer tous les bandeau en cas de ? */
 scope.${dollar}on("${dollar}destroy", function() {
 	hideForm(crudAside);
-	hideform(searchAside);
+	hideForm(searchAside);
 })
 }]).factory('AuthorRestService', function (${dollar}resource) {
 	/** Service contenant les appels vers le service REST basique */

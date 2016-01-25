@@ -169,9 +169,16 @@
             <version>2.0.3</version>
         </dependency>
 
+		<!-- Support for the Elasticsearch search and analytics engine including "spring-data-elasticsearch". -->
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        
+        <!-- Support for JTA distributed transactions via Atomikos. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jta-atomikos</artifactId>
         </dependency>
         
         <!-- ~~~~ -->

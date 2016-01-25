@@ -1,9 +1,15 @@
 $output.resource("application.yml")##
+
+debug: false # enable a “debug” mode for logging
+
 security:
     basic:
         enabled: false
 
 spring:
+    application:
+        admin:
+            enabled: true # Enable admin features for the application.
     datasource:
         driver-class-name: @jdbc.driver@
         url: @jdbc.url@

@@ -1,8 +1,8 @@
 $output.webapp("assets\js", "bookController.js")##
 app.controller("BookController", ["${dollar}scope", "${dollar}window", "${dollar}aside", "PlaceholderTextService", 
-"${dollar}log", "BookRestService", "BookRestSearchService", "BookRestIndexService",
-"AuthorRestService", function(scope, b, c, d, log, 
-		  bookRestService, bookRestSearchService, bookRestIndexService, authorRestService) {
+"${dollar}log", "BookRestService", "BookRestSearchService", "BookRestIndexService", "BookRestMassDeleteService",
+"AuthorRestService", "${dollar}alert", "${dollar}timeout", function(scope, window, c, d, log, 
+		  bookRestService, bookRestSearchService, bookRestIndexService, bookRestMassDeleteService, authorRestService, alertService, timeoutService) {
 scope.settings = {
 		singular: "Item",
 		plural: "Items",
@@ -182,7 +182,7 @@ scope.createItem = function() {
 	scope.refresh();
 	
 	/** Pour l'affichage des messages vers l'utilisateur */
-	b.showAlert = function(){
+	window.showAlert = function(){
 	    console.log("toto");
 	    var userALert = alertService({
 	                    title: "SUCCESS:",
@@ -198,11 +198,11 @@ scope.createItem = function() {
 	    	userALert.show()
 	        }, 1 /*durée du timeout*/);
 	};
-	b.showAlert();
+	window.showAlert();
 	};
 	
 	var onSaveError = function (result) {
-		b.showAlert = function(){
+		window.showAlert = function(){
 		    console.log("toto");
 		    var userALert = alertService({
 		                    title: "ERROR:",
@@ -218,7 +218,7 @@ scope.createItem = function() {
 		    	userALert.show()
 		        }, 1 /*durée du timeout*/);
 		};
-		b.showAlert();
+		window.showAlert();
 	};
 	
 	if (scope.item.id != null) {
@@ -262,7 +262,7 @@ scope.remove = function(b) {
 			bookRestMassDeleteService.massDelete({id: ids}, function success(data) {
 				scope.refresh();
 				/** Pour l'affichage des messages vers l'utilisateur */
-				b.showAlert = function(){
+				window.showAlert = function(){
 				    var userALert = alertService({
 				                    title: "SUCCESS:",
 				                    content: '<BR>Your book have been deleted. The result table have been <b>updated</b>.',
@@ -277,7 +277,7 @@ scope.remove = function(b) {
 				    	userALert.show()
 				        }, 1 /*durée du timeout*/);
 				};
-				b.showAlert();
+				window.showAlert();
 			}, function failure(err) {
 				alert('request failed');
 			});
@@ -294,6 +294,11 @@ scope.remove = function(b) {
 	// on décoche la case à cocher globale
 	scope.selectAll = false;
 	}
+};
+
+/* Get data in csv format for download */
+scope.getCSVData = function() {
+	return scope.data;
 };
 
 /** Permet d'indexer tous les éléments */

@@ -3,15 +3,15 @@ $output.webapp("assets/tpl/apps", "book.html")##
   <div class="page-header">
     <div class="actions" >
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text"><span class="md md-info-outline"></span></button>
-	  <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="searchItem()" data-title="search"><span class="md md-search"></span></button>
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="refresh()"><span class="md md-refresh"></span></button>
+	  <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="searchItem()" data-title="search" bs-tooltip><span class="md md-search"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="refresh()" data-title="refresh the grid" bs-tooltip><span class="md md-refresh"></span></button>
       
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="clear()"><span class="md md-clear"></span></button>
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="index()"><span class="md md-settings"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="clear()" data-title="clear the grid" bs-tooltip><span class="md md-clear"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="index()" data-title="index all items" bs-tooltip><span class="md md-settings"></span></button>
       
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-csv="data" filename="bookData.csv"><span class="md md-export"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-csv="getCSVData()" field-separator=";" lazy-load="true" charset="utf-8" filename="bookData.csv" csv-label="true" data-title="export the grid"><span class="md md-download"></span></button>
       
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="checkBoxValue()"><span class="md md-info"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="checkBoxValue()" data-title="test button" bs-tooltip><span class="md md-info"></span></button>
     </div>
 
     <h1>
@@ -36,12 +36,12 @@ $output.webapp("assets/tpl/apps", "book.html")##
         <tr fsm-sticky-header scroll-body="'${pound}table-area-1'" scroll-stop="64">
           <th><input type="checkbox" class="relative" ng-model="selectAll" ng-click="checkAll()" /></th>
           <th>Icon</th>
-          <th>Id</th>
+          <th fsm-sort="id">Id</th>
           <th fsm-sort="title">Title</th>
-          <th fsm-sort="author">Author</th> 
-          <th>Description</th>
+          <th fsm-sort="author.name">Author</th> 
+          <th fsm-sort="description">Description</th>
           <th fsm-sort="price">Price</th>
-		  <th>Publication Date</th>
+		  <th fsm-sort="publicationDate">Publication Date</th>
           <th class="text-right">Actions</th>
         </tr>
         </thead>
@@ -56,9 +56,9 @@ $output.webapp("assets/tpl/apps", "book.html")##
             <td align="center">{{ item.price }} &${pound}8364;</td>
 			<td>{{ item.publicationDate | date:"dd/MM/yyyy" }} </td>			
             <td class="text-right" ng-click="${dollar}event.stopPropagation()">
-              <button type="button" class="btn btn-link btn-round" data-title="Edit item"  ng-click="editItem(item)"><i class="md md-edit"></i></button>
-              <button type="button" class="btn btn-link btn-round" data-title="View item" ng-click="viewItem(item)"><i class="md md-search"></i></button>
-              <button type="button" class="btn btn-link btn-round" data-title="Delete item" ng-click="remove(item)"><i class="md md-delete"></i></button>
+              <button type="button" class="btn btn-link btn-round" data-title="Edit item" ng-click="editItem(item)" bs-tooltip><i class="md md-edit"></i></button>
+              <button type="button" class="btn btn-link btn-round" data-title="View item" ng-click="viewItem(item)" bs-tooltip><i class="md md-search"></i></button>
+              <button type="button" class="btn btn-link btn-round" data-title="Delete item" ng-click="remove(item)" bs-tooltip><i class="md md-delete"></i></button>
             </td>
           </tr>
         </tbody>
