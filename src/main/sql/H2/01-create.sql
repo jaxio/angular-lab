@@ -25,6 +25,49 @@ CREATE TABLE BOOK (
     primary key (id)
 );
 
+-- book reader
+CREATE TABLE READER (
+    id                          int not null identity,
+    name                        varchar(100) not null,
+
+    primary key (id)
+);
+
+-- store where to buy books
+CREATE TABLE STORE (
+    id                          int not null identity,
+    name                        varchar(100) not null,
+    address						varchar(100) not null,
+    zipCode						varchar(100) not null,
+    city						varchar(100) not null,
+
+    primary key (id)
+);
+
+-- relation table between book and reader
+CREATE TABLE BOOK_READER (
+	id  						int not null identity,
+	book_id						char(36) not null,
+	reader_id					int,
+	
+	constraint book_reader_fk_1 foreign key (book_id) references BOOK,
+	constraint book_reader_fk_2 foreign key (reader_id) references READER,
+	primary key (id)
+);
+
+-- relation table between book and store
+CREATE TABLE BOOK_STORE (
+	id  						int not null identity,
+	book_id 					char(36) not null,
+	store_id 					int,
+	
+	constraint book_store_fk_1 foreign key (book_id) references BOOK,
+	constraint book_store_fk_2 foreign key (store_id) references STORE,
+	primary key (id)
+);
+
+
+
 INSERT INTO AUTHOR  VALUES (1, 'John Doe',null);
 INSERT INTO AUTHOR  VALUES (2, 'Camus albert',null);
 INSERT INTO AUTHOR  VALUES (3, 'Hugo victor',null);
@@ -61,5 +104,16 @@ INSERT INTO BOOK  VALUES ('serial_19', 'La religieuse', '...', null, 12, 12.25);
 INSERT INTO BOOK  VALUES ('serial_20', 'Le paysan de Paris', '...', null, 13, 12.25);
 
 
+INSERT INTO READER  VALUES (1, 'John Johnson');
+INSERT INTO READER  VALUES (2, 'Me');
+
+INSERT INTO BOOK_READER  VALUES (1, 'serial_1', 1);
+INSERT INTO BOOK_READER  VALUES (2, 'serial_2', 1);
+INSERT INTO BOOK_READER  VALUES (3, 'serial_3', 1);
 
 
+INSERT INTO STORE  VALUES (1, 'Fnac', 'rue de Paris', '75000', 'PARIS');
+
+INSERT INTO BOOK_STORE  VALUES (1, 'serial_1', 1);
+INSERT INTO BOOK_STORE  VALUES (2, 'serial_2', 1);
+INSERT INTO BOOK_STORE  VALUES (3, 'serial_3', 1);
