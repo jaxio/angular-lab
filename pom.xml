@@ -43,13 +43,24 @@
 
         <!-- **** CHANGE THE PROPERTIES BELOW TO USE YOUR OWN DATABASE **** -->
         <!-- **** DO NOT USE A PRODUCTION DATABASE **** -->
-        <jdbc.type>h2</jdbc.type><!-- see 'db' profile, it is used to find the sql script -->
+        <database.type>H2</database.type><!-- see 'db' profile, it is used to find the sql script -->
+        
+        <!--
+        <database.type>ORACLE</database.type>
+		-->
 
         <!-- h2 jdbc driver (same as wildfly) -->
         <jdbc.groupId>com.h2database</jdbc.groupId>
         <jdbc.artifactId>h2</jdbc.artifactId>
         <jdbc.version>1.4.187</jdbc.version>
-
+        
+        <!-- ORACLE jdbc driver -->
+        <!-- 
+        <jdbc.groupId>oracle</jdbc.groupId>
+        <jdbc.artifactId>ojdbc</jdbc.artifactId>
+        <jdbc.version>7</jdbc.version>
+ -->
+ 
         <!-- h2 jdbc settings -->
         <jdbc.driver>org.h2.Driver</jdbc.driver>
         <jdbc.url>jdbc:h2:${project.build.directory}/db/angular-lab;MVCC=TRUE;FILE_LOCK=NO</jdbc.url><!-- for runtime -->
@@ -59,6 +70,18 @@
         <jdbc.catalog></jdbc.catalog>
         <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
         <sql-maven-plugin.delimiter>;</sql-maven-plugin.delimiter>
+        
+        <!-- ORACLE jdbc settings -->
+        <!-- 
+        <jdbc.driver>oracle.jdbc.driver.OracleDriver</jdbc.driver>
+        <jdbc.url>jdbc:oracle:thin:@localhost:1521:XE</jdbc.url>
+        <jdbc.user>HR</jdbc.user>
+        <jdbc.password>HR</jdbc.password>
+        <jdbc.schema></jdbc.schema>
+        <jdbc.catalog></jdbc.catalog>
+        <hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
+        <sql-maven-plugin.delimiter>;</sql-maven-plugin.delimiter>
+ 		-->
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Version dependencies when used in multiple dependencies -->
@@ -75,7 +98,8 @@
         <!-- host port where the application will be deployed -->
         <application.host>localhost</application.host>
         <application.port>8080</application.port>
-        <application.contextpath>/demo</application.contextpath>
+        <application.contextpath>/myApp</application.contextpath>
+       
         <!-- logs -->
         <log.target>${project.build.directory}/logs</log.target>
         <log.level>DEBUG</log.level>
@@ -181,6 +205,11 @@
             <artifactId>spring-boot-starter-jta-atomikos</artifactId>
         </dependency>
         
+    	<!-- dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-actuator</artifactId>
+    	</dependency-->
+
         <!-- ~~~~ -->
         <!-- TEST -->
         <!-- ~~~~ -->
@@ -343,7 +372,7 @@
                                     <fileset>
                                         <basedir>${project.basedir}</basedir>
                                         <includes>
-                                            <include>src/main/sql/${jdbc.type}/*.sql</include>
+                                            <include>src/main/sql/${database.type}/*.sql</include>
                                         </includes>
                                     </fileset>
                                 </configuration>
