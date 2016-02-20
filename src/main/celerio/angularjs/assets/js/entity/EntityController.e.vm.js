@@ -415,7 +415,6 @@ app.factory('${entity.model.type}RestMassDeleteService', function (${dollar}reso
 	        	isArray: true
 	        }
 		#end	
-	    });	
 	#end
-	});
+	    })});
 #end
