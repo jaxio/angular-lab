@@ -44,7 +44,7 @@ From this folder run from:
 
 ## Step 3: access the app and play
 
-    http://localhost:8080/
+    http://localhost:8080/myApp
 
 ## Extra tip: delete generated code
 
