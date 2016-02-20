@@ -1,0 +1,119 @@
+$output.webapp("assets/tpl/apps", "edit${entity.model.type}.html")##
+<section class="forms-basic">
+  <div class="page-header">
+    <h1>
+      <i class="md md-input"></i>
+      ${entity.model.type} form
+    </h1>
+    <p class="lead">
+      You can edit ${entity.model.type} entity and see linked entities.
+    </p>
+  </div>
+
+<div class="row m-b-40">
+
+    <div class="col-md-3 col-md-push-9">
+      <h5>Todo</h5>
+      <p>Todo</p>
+    </div>
+    <div class="col-md-8 col-md-pull-3">
+      <div class="well">
+        <form class="form-horizontal">
+          <fieldset>
+            <legend>Main entity</legend>          
+            <span class="help-block m-b-20">Please fill out the following form below.</span>
+
+#foreach ($attribute in $entity.nonCpkAttributes.list)		
+	#if (!$attribute.isInPk()  && !$attribute.isInFk())
+			<div class="form-group">
+              <label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
+              <div class="col-lg-10">
+		#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "String")            
+               <input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" required>          
+		#elseif ($attribute.type == "Date")
+			<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" data-autoclose="1" bs-datepicker>
+		#else
+        	<p>Type [$attribute.type] not implemented yet !!!!</p>
+        #end
+        	</div>
+           </div>
+    #end
+#end
+## pk are not updatable
+#foreach ($attribute in $entity.inPkAttributes.list)
+          <div class="form-group">
+              <label for="id" class="col-lg-2 control-label">$attribute.varUp</label>
+              <div class="col-lg-10">
+                <input type="text" class="form-control" id="${attribute.var}" ng-disabled="true" ng-model="item.${attribute.var}">
+              </div>
+         </div>
+#end        
+            
+
+            <div class="form-group">
+              <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default" ng-click="remove(item)">Delete</button>
+                <button type="submit" class="btn btn-primary" ng-click="saveItem(item)">Save</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+</section>
+
+<section class="tables-data">
+
+  <div class="page-header">
+    <h1>
+      <i class="md md-list"></i>
+      Linked entities
+    </h1>
+    <p class="lead">
+      Todo
+    </p>
+  </div>
+
+## --------------- Many to many: to entity
+#foreach ($relation in $entity.manyToMany.list)
+  <div class="card">
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="table-title p-20">${relation.to.varUp}: {{${relation.to.var}s.length}} rows</h3>
+      </div>
+      <div class="col-md-6">
+        <div class="table-search">
+          <input type="text" ng-model="tableParams.filter()['search']" class="form-control" placeholder="Search data"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive white">
+
+      <table ng-table="tableParams" template-pagination="assets/tpl/partials/data-table-pager.html" class="table table-full table-full-small">
+        <tr ng-repeat="item in item.${relation.to.var}s">
+#foreach ($attribute in $relation.toEntity.nonCpkAttributes.list) 
+	##if (!$attribute.isInPk()  && !$attribute.isInFk())
+	#if ($velocityCount == 1)
+	## add a link on the first column
+		  <td data-title="'${attribute.name}'" filter="{ '${attribute.var}': 'text' }" sortable="'${attribute.var}'"><a ui-sref="edit${relation.to.varUp}({id:item.id})">{{item.${attribute.var}}}</a></td>
+	#else
+		  <td data-title="'${attribute.name}'" filter="{ '${attribute.var}': 'text' }" sortable="'${attribute.var}'">{{item.${attribute.var}}}</td>	
+	#end	  
+	##end
+#end
+        </tr>
+      </table>
+
+    </div>
+
+  </div>
+#end
+</section>
+
+
+

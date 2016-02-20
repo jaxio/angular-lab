@@ -1,0 +1,51 @@
+$output.webapp("assets/tpl", "logLevels.html")##
+<section>
+  <div class="page-header">
+    <div class="actions" >
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text"><span class="md md-info-outline"></span></button>
+	  <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="searchItem()" data-title="search"><span class="md md-search"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="refresh()"><span class="md md-refresh"></span></button>
+      
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="clear()"><span class="md md-clear"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="index()"><span class="md md-settings"></span></button>
+    </div>
+
+    <h1>
+      <i class="md md-camera"></i>
+      Log Levels
+    </h1>
+    <p class="lead">
+      This page should list log levels. We should use a treeview to help user to navigate threw all those logs. We should also allow the user to filter logs. 
+    </p>
+  </div>
+</section>
+
+<section>
+ <div>
+    <h2>Logs</h2>
+
+    <p>There are {{ loggers.length }} loggers.</p>
+
+    <span>Filter</span> <input type="text" ng-model="filter" class="form-control">
+
+	<table class="table table-condensed table-striped table-bordered table-responsive">
+        <thead>
+        <tr title="click to order">
+            <th ng-click="predicate = 'name'; reverse=!reverse"><span>Name</span></th>
+            <th ng-click="predicate = 'level'; reverse=!reverse"><span>Level</span></th>
+        </tr>
+        </thead>
+
+     	<tr ng-repeat="logger in loggers | filter:filter | orderBy:predicate:reverse">
+            <td><small>{{logger.name}}</small></td>
+            <td>
+                <button ng-click="changeLevel(logger.name, 'TRACE')" ng-class="(logger.level=='TRACE') ? 'btn-danger' : 'btn-default'" class="btn btn-default btn-xs">TRACE</button>
+                <button ng-click="changeLevel(logger.name, 'DEBUG')" ng-class="(logger.level=='DEBUG') ? 'btn-warning' : 'btn-default'" class="btn btn-default btn-xs">DEBUG</button>
+                <button ng-click="changeLevel(logger.name, 'INFO')" ng-class="(logger.level=='INFO') ? 'btn-info' : 'btn-default'" class="btn btn-default btn-xs">INFO</button>
+                <button ng-click="changeLevel(logger.name, 'WARN')" ng-class="(logger.level=='WARN') ? 'btn-success' : 'btn-default'" class="btn btn-default btn-xs">WARN</button>
+                <button ng-click="changeLevel(logger.name, 'ERROR')" ng-class="(logger.level=='ERROR') ? 'btn-primary' : 'btn-default'" class="btn btn-default btn-xs">ERROR</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</section>

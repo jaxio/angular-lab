@@ -112,9 +112,19 @@ public class $output.currentClass{
     @RequestMapping(value = "/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
     public ResponseEntity<$entity.model.type> findById(@PathVariable $entity.primaryKey.type $entity.primaryKey.var) throws URISyntaxException {
         log.debug("Find by id $entity.model.varsUp : {}", $entity.primaryKey.var);
-        return Optional.ofNullable(${entity.repository.var}.findOne($entity.primaryKey.var))
+        
+        $entity.model.type fullyLoaded${entity.model.type} = ${entity.repository.var}.findOne($entity.primaryKey.var);
+#foreach ($relation in $entity.manyToMany.list)
+	#if ($velocityCount == 1)
+        // force object loading from database because of lazy loading settings
+	#end
+        fullyLoaded${entity.model.type}.${relation.to.getters}().size();
+#end        		
+        
+		return Optional.ofNullable(fullyLoaded${entity.model.type})
             .map(${entity.model.var} -> new ResponseEntity<>(
                 ${entity.model.var},
                 HttpStatus.OK))
@@ -140,7 +150,7 @@ public class $output.currentClass{
     @RequestMapping(value = "/mass/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable $entity.primaryKey.type[] id) throws URISyntaxException {
-        log.debug("Delete by id $entity.model.varsUp : {}", id);
+        log.debug("Delete by id $entity.model.varsUp : {}", (Object[])id);
         Stream.of(id).forEach(item -> {${entity.repository.var}.delete(item); ${entity.model.var}SearchRepository.delete(item);}); 
         
         return ResponseEntity.ok().build();
@@ -169,4 +179,32 @@ public class $output.currentClass{
             .stream(${entity.model.var}SearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+## --------------- Many to One
+#foreach ($manyToOne in $entity.manyToOne.list)
+    /**
+     * Find all $entity.model.vars linked to an $manyToOne.to.var id (case: Many to One).
+     */
+    @RequestMapping(value = "/${entity.model.vars}By${manyToOne.to.type}Id/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<$entity.model.type> getAll${entity.model.type}sBy${manyToOne.to.type}Id(@PathVariable ${manyToOne.toEntity.primaryKey.type} id) {
+    	log.debug("REST request to get All${entity.model.type}sBy${manyToOne.to.type}Id : {}", id);
+    	return ${entity.model.var}Repository.findBy${manyToOne.to.type}Id(id);
+    }
+#end
+
+## --------------- Many to many
+#foreach ($manyToMany in $entity.manyToMany.list)
+	/**
+	 * finder all $entity.model.vars linked to a $manyToMany.to.var id (case: Many to Many).
+	 */
+	@RequestMapping(value = "/${entity.model.vars}By${manyToMany.to.type}sId/{id}",
+    	method = RequestMethod.GET,
+    	produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<$entity.model.type> getAll${entity.model.type}sBy${manyToMany.to.type}Id(@PathVariable ${manyToMany.toEntity.primaryKey.type} id) {
+		log.debug("REST request to get All${entity.model.type}sBy${manyToMany.to.type}Id : {}", id);
+		return ${entity.model.var}Repository.findBy${manyToMany.to.type}sId(id);
+	}
+#end
 }

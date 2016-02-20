@@ -1,7 +1,7 @@
 $output.resource("application.yml")##
 
 debug: false # enable a “debug” mode for logging
-
+    
 security:
     basic:
         enabled: false
@@ -10,7 +10,7 @@ spring:
     application:
         admin:
             enabled: true # Enable admin features for the application.
-    datasource:
+    datasource: # primary datasource
         driver-class-name: @jdbc.driver@
         url: @jdbc.url@
         name:
@@ -23,7 +23,7 @@ spring:
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
 
         database-platform: @hibernate.dialect@
-        database: H2
+        database: @database.type@
         show_sql: true
         properties:
             hibernate.cache.use_second_level_cache: false
@@ -45,6 +45,6 @@ spring:
         cache-seconds: 1
 
 server:
-    port: 8080
-    contextPath: /myApp
+    port: @application.port@
+    contextPath: @application.contextpath@
     

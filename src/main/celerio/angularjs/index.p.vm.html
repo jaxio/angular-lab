@@ -61,12 +61,25 @@ $output.webapp("index.html")##
   <script src="assets/js/app2.js"></script>
   <script src="assets/js/directives.js"></script>
   
-  <script src="assets/js/authorController.js"></script>
-  <script src="assets/js/bookController.js"></script>
-  <script src="assets/js/bookStates.js"></script>
+  <script src="assets/js/admin/logsController.js"></script>
+  <script src="assets/js/admin/translations.js"></script>
+  <script src="assets/js/admin/translationController.js"></script>
   
+## controller for each entity    	
+#foreach ($entity in $project.entities.list)
+  <script src="assets/js/entity/${entity.model.var}Controller.js"></script>
+  <script src="assets/js/entity/${entity.model.var}EditController.js"></script>
+#end  
+  
+  <script src="assets/js/applicationStates.js"></script>
+  
+  <script src="assets/js/specialConfiguration.js"></script>
+  
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
   <script src="bower_components/ng-csv/build/ng-csv.js"></script>
   
 </body>

@@ -1,16 +1,3 @@
-##
-## Licensed under the Apache License, Version 2.0 (the "License");
-## you may not use this file except in compliance with the License.
-## You may obtain a copy of the License at
-##
-##    http://www.apache.org/licenses/LICENSE-2.0
-##
-## Unless required by applicable law or agreed to in writing, software
-## distributed under the License is distributed on an "AS IS" BASIS,
-## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-## See the License for the specific language governing permissions and
-## limitations under the License.
-##
 $output.java($entity.model)##
 
 $output.require("java.util.logging.Logger")##
@@ -51,13 +38,16 @@ $annotation
 #if($entity.isRoot())
 $output.require("java.io.Serializable")##
 $output.require("com.jaxio.jpa.querybyexample.Identifiable")##
-@Document(indexName = "${entity.model.var}")
+// elastic search index must be lowercase
+@Document(indexName = "${entity.model.var.toLowerCase()}")
 public#if ($output.isAbstract()) abstract#{end} class ${output.currentClass}${entity.spaceAndExtendsStatement} implements Identifiable<$entity.primaryKey.type>${entity.commaAndImplementedInterfaces}, Serializable {
 #else
 $output.require($entity.parent.model)##
 public#if ($output.isAbstract()) abstract#{end} class $output.currentClass extends $entity.parent.model.type {
 #end
-    private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 1L;
+
     private static final Logger log = Logger.getLogger(${output.currentClass}.class.getName());
 #if ($entity.isRoot() && $entity.primaryKey.isComposite())
 

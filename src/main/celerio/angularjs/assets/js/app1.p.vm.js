@@ -1057,5 +1057,8 @@ var app = angular.module("materialism", ["app.constants", "ngRoute", "ngAnimate"
                                          "textAngular", "fsm", "smoothScroll", "LocalStorageModule", 
                                          "ngResource",/* for REST WS calls */
 					 "ui.router",/* for state management inside application */
-					 "ngCsv" /* for data export into csv files*/
+					 "ngCsv", /* for data export into csv files*/
+					 "pascalprecht.translate", /* for label translation */
+					 "infinite-scroll", /* for infinite scroll in data grid */
+					 "ngCookies" /* to use cookies */
                                          ]);

@@ -32,7 +32,7 @@ public class Application {
     	SpringApplication app = new SpringApplication(Application.class);
         Environment env = app.run(args).getEnvironment();
         
-        log.info("Access URLs:\n----------------------------------------------------------\n\t" +
+        log.info("\n\nAccess URLs:\n----------------------------------------------------------\n\t" +
                 "Local: \t\thttp://127.0.0.1:8080");
     }
 }

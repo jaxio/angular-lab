@@ -1,0 +1,68 @@
+$output.webapp("assets/tpl/apps", "crud-${entity.model.var}.html")##
+
+<div class="aside bs-docs-aside" tabindex="-1" role="dialog">
+  <div class="close">
+    <div class="btn btn-round btn-info" ng-click="${dollar}hide()" data-title="{{ 'CLOSE' | translate }}" bs-tooltip><i class="md md-close"></i></div>
+  </div>
+
+  <div class="aside-dialog">
+    <div class="aside-body bs-sidebar">
+
+      <form class="form-floating" novalidate="novalidate" ng-submit="saveItem(item)">
+        <fieldset>
+          <legend><span ng-bind-html="item.icon"></span> {{cmd}} {{settings.singular}}</legend>
+
+#foreach ($attribute in $entity.nonCpkAttributes.list)		
+	#if (!$attribute.isInPk()  && !$attribute.isInFk())
+		<div class="form-group filled">
+		    <label class="control-label">$attribute.varUp</label>
+        #if ($attribute.type == "BigDecimal" || $attribute.type == "Integer")
+        	<input type="text" class="form-control" ng-model="item.${attribute.var}" ng-disabled="!item.editing">
+    	#elseif ($attribute.type == "String")
+            <input type="text" class="form-control" ng-model="item.${attribute.var}" ng-disabled="!item.editing" required>
+        #elseif ($attribute.type == "Date")
+        	<input type="text" class="form-control" ng-model="item.${attribute.var}" data-autoclose="1" placeholder="{{ '${attribute.name}' | translate }}"
+                           bs-datepicker ng-disabled="!item.editing">
+        #else
+        	<p>Type [$attribute.type] not implemented yet !!!!</p>
+        #end
+        </div>
+	#end
+	
+	#if ($attribute.isInFk())
+		#if ($attribute.getXToOneRelation().isManyToOne())
+			<div class="form-group filled">
+            	<label class="control-label">${attribute.getEntityIPointTo().name}</label>
+            	<ui-select ng-model="item.${attribute.var}" theme="select2" title="Choose an $attribute.getEntityIPointTo().name.toLowerCase()" search-enabled="false" ng-disabled="!item.editing">
+                	<ui-select-match placeholder="Choose an $attribute.getEntityIPointTo().name.toLowerCase()">{{${dollar}select.selected.name}}</ui-select-match>
+                	<ui-select-choices repeat="item in ${attribute.getEntityIPointTo().name.toLowerCase()}s | filter: ${dollar}select.search">
+                  		<div ng-bind-html="item.name | highlight: ${dollar}select.search"></div>
+                  		#foreach ($pkAttribute in $attribute.getEntityIPointTo().getPrimaryKeyAttributes().list)
+                  			<small ng-bind-html="item.$pkAttribute.name | highlight: ${dollar}select.search"></small>
+                  		#end
+                	</ui-select-choices>
+             	</ui-select>
+		 </div>
+		#else
+			<p>Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!!</p>
+		#end 
+	#end
+	
+#end
+## pk are not updatable
+#foreach ($attribute in $entity.inPkAttributes.list)
+		  <div class="form-group filled">
+            <label class="control-label">$attribute.varUp</label>
+            <input type="text" class="form-control" ng-model="item.id" ng-disabled="true">
+          </div>
+#end
+          <div class="form-group">
+            <button type="submit" class="btn btn-lg btn-primary" ng-hide="!item.editing">{{ 'SAVE' | translate }}</button>
+          </div>
+
+        </fieldset>
+      </form>
+
+    </div>
+  </div>
+</div>
