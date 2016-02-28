@@ -23,7 +23,9 @@ $output.webapp("assets/tpl/apps", "edit${entity.model.type}.html")##
             <legend>Main entity</legend>          
             <span class="help-block m-b-20">Please fill out the following form below.</span>
 
-#foreach ($attribute in $entity.nonCpkAttributes.list)		
+#foreach ($attribute in $entity.nonCpkAttributes.list)
+
+	## manage simple attribute		
 	#if (!$attribute.isInPk()  && !$attribute.isInFk())
 			<div class="form-group">
               <label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
@@ -39,6 +41,36 @@ $output.webapp("assets/tpl/apps", "edit${entity.model.type}.html")##
            </div>
     #end
 #end
+
+## manage foreign key attribute (complex attribute): display them as combo list (mono-selection)
+#foreach ($manyToOne in $entity.manyToOne.list)
+	<div class="form-group filled">
+	
+            <label class="col-lg-2 control-label">${manyToOne.to.type}</label>
+            <div class="col-lg-10">     	
+            <ui-select ng-model="item.$manyToOne.to.var" theme="select2" title="Choose an $manyToOne.to.var" search-enabled="false">
+#foreach ($toAttribute in $manyToOne.getToEntity().getAttributes().list)  
+	 #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())          
+                <ui-select-match placeholder="Choose an $manyToOne.to.var">{{${dollar}select.selected.$toAttribute.name}}</ui-select-match>
+     	#break           
+     #end
+#end                
+                <ui-select-choices repeat="itemA in ${manyToOne.to.type.substring(0,1).toLowerCase()}${manyToOne.to.type.substring(1)}s | filter: ${dollar}select.search">
+#foreach ($toAttribute in $manyToOne.getToEntity().getAttributes().list)
+                #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())
+                  	<div ng-bind-html="itemA.$toAttribute.name | highlight: ${dollar}select.search"></div>
+                  	#break
+                #end
+#end
+#foreach ($toPk in $manyToOne.getToEntity().getInPkAttributes().list)
+                  		<small ng-bind-html="itemA.$toPk.name | highlight: ${dollar}select.search"></small>
+#end                  	
+                </ui-select-choices>
+             </ui-select>
+             </div>
+	</div>
+#end
+
 ## pk are not updatable
 #foreach ($attribute in $entity.inPkAttributes.list)
           <div class="form-group">
@@ -52,6 +84,7 @@ $output.webapp("assets/tpl/apps", "edit${entity.model.type}.html")##
 
             <div class="form-group">
               <div class="col-lg-10 col-lg-offset-2">
+              	<button type="submit" class="btn btn-primary" ui-sref="$entity.name.toLowerCase()">back to List</button>
                 <button type="reset" class="btn btn-default" ng-click="remove(item)">Delete</button>
                 <button type="submit" class="btn btn-primary" ng-click="saveItem(item)">Save</button>
               </div>

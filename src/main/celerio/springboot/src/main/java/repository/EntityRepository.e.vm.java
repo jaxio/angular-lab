@@ -31,35 +31,4 @@ $output.require("java.util.List")##
  */
 public interface $output.currentClass extends JpaRepository<$entity.model.type, $entity.root.primaryKey.type> {
 
-## --------------- Many to One
-#foreach ($manyToOne in $entity.manyToOne.list)
-	/**
-	 * Find ${entity.model.vars} linked to an $manyToOne.to.var id (case: Many to One).
-	 * 
-	 * @param id ${manyToOne.to.var} id
-	 * @return ${entity.model.var} list
-	 */
-#if ($manyToOne.toEntity.primaryKey.isSimple())
-	List<$entity> findBy${manyToOne.to.type}Id(${manyToOne.toEntity.primaryKey.type} id);
-	
-#else
-	// not yet implemented !
-#end	
-#end
-
-## --------------- Many to many
-#foreach ($manyToMany in $entity.manyToMany.list)
-	/**
-	 * Find ${entity.model.vars} linked to a $manyToMany.to.var id (case: Many to Many).
-	 * 
-	 * @param id ${manyToMany.to.var} id
-	 * @return ${entity.model.var} list
-	 */
-#if ($manyToMany.toEntity.primaryKey.isSimple())
-	List<$entity> findBy${manyToMany.to.type}sId(Integer id);
-	
-#else
-	// not yet implemented !
-#end
-#end
 }

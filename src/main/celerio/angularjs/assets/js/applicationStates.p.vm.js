@@ -64,4 +64,14 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 				}
 	});
 #end
+
+## create state for each entity    	
+#foreach ($entity in $project.entities.list)
+	${dollar}stateProvider
+		.state('create${entity.name}', {
+			url: "/${entity.name.toLowerCase()}",
+	    	templateUrl: "assets/tpl/apps/edit${entity.name}.html",
+			controller: "${entity.name}CreateController"
+	});
+#end
 });

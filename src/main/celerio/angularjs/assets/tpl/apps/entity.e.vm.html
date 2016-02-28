@@ -43,7 +43,7 @@ $output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
 #end
 ## --------------- Many to one
 #foreach ($relation in $entity.manyToOne.list)
-		  <th fsm-sort="${relation.to.var}.name">$relation.to.varUp</th>
+		  <th fsm-sort="${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()">$relation.to.varUp</th>
 #end
           <th class="text-right">Actions</th>
         </tr>
@@ -63,7 +63,7 @@ $output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
 #end
 ## --------------- Many to one
 #foreach ($relation in $entity.manyToOne.list)
-		  <td>{{item.${relation.to.var}.name}}</td>
+		  <td>{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</td>
 #end		
             <td class="text-right" ng-click="${dollar}event.stopPropagation()">
               <button type="button" class="btn btn-link btn-round" data-title="{{ 'EDIT_ITEM' | translate }}" ui-sref="edit${entity.model.type}({id:item.id})" bs-tooltip><i class="md md-edit"></i></button>
@@ -79,7 +79,7 @@ $output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
   <div class="footer-buttons">
     <div class="btn btn-primary btn-round btn-lg m-r-10 btn-footer" ng-show="(data|filter:{selected: true}).length" ng-click="remove()"  data-title="Remove {{(data|filter:{selected: true}).length}} item(s)" bs-tooltip><i class="md md-delete"></i></div>
     <div class="btn btn-default btn-round btn-lg m-r-10 btn-footer" scroll-to="top" ng-hide="scroll<100" data-title="{{ 'SCROLL_TO_TOP' | translate }}" bs-tooltip><i class="md md-arrow-drop-up"></i></div>
-    <div class="btn btn-primary btn-round btn-lg" ng-click="createItem()" data-title="New {{settings.singular}}" bs-tooltip><i class="md md-add"></i></div>
+    <div class="btn btn-primary btn-round btn-lg" ui-sref="create${entity.model.type}()" data-title="New {{settings.singular}}" bs-tooltip><i class="md md-add"></i></div>
   </div>
 
 </div>

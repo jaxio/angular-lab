@@ -179,32 +179,4 @@ public class $output.currentClass{
             .stream(${entity.model.var}SearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
-
-## --------------- Many to One
-#foreach ($manyToOne in $entity.manyToOne.list)
-    /**
-     * Find all $entity.model.vars linked to an $manyToOne.to.var id (case: Many to One).
-     */
-    @RequestMapping(value = "/${entity.model.vars}By${manyToOne.to.type}Id/{id}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<$entity.model.type> getAll${entity.model.type}sBy${manyToOne.to.type}Id(@PathVariable ${manyToOne.toEntity.primaryKey.type} id) {
-    	log.debug("REST request to get All${entity.model.type}sBy${manyToOne.to.type}Id : {}", id);
-    	return ${entity.model.var}Repository.findBy${manyToOne.to.type}Id(id);
-    }
-#end
-
-## --------------- Many to many
-#foreach ($manyToMany in $entity.manyToMany.list)
-	/**
-	 * finder all $entity.model.vars linked to a $manyToMany.to.var id (case: Many to Many).
-	 */
-	@RequestMapping(value = "/${entity.model.vars}By${manyToMany.to.type}sId/{id}",
-    	method = RequestMethod.GET,
-    	produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<$entity.model.type> getAll${entity.model.type}sBy${manyToMany.to.type}Id(@PathVariable ${manyToMany.toEntity.primaryKey.type} id) {
-		log.debug("REST request to get All${entity.model.type}sBy${manyToMany.to.type}Id : {}", id);
-		return ${entity.model.var}Repository.findBy${manyToMany.to.type}sId(id);
-	}
-#end
 }

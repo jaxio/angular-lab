@@ -2,12 +2,46 @@ $output.webapp("assets\js\entity", "${entity.model.var}EditController.js")##
 
 app.controller("${entity.model.type}EditController", ["${dollar}scope", "${dollar}window", "${dollar}aside", 
 "${dollar}log", "${entity.model.type}RestService", 
+#foreach ($attribute in $entity.nonCpkAttributes.list)
+#if ($attribute.isInFk())
+	#if ($attribute.getXToOneRelation().isManyToOne())
+		"${attribute.getEntityIPointTo().name}RestService",
+	#else
+		/* Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! */
+	#end 
+#end
+#end
 		"${dollar}alert", "${dollar}timeout", "item", function(scope, window, aside, log, 
-		${entity.model.var}RestService, alertService, timeoutService, item) {
+		${entity.model.var}RestService, 
+#foreach ($attribute in $entity.nonCpkAttributes.list)
+	#if ($attribute.isInFk())
+		#if ($attribute.getXToOneRelation().isManyToOne())
+			$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1).toLowerCase()RestService,
+		#else
+			/* Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! */
+		#end 
+	#end
+#end		
+		alertService, timeoutService, item) {
 	
 	log.info("inside ${entity.model.type}EditController, item id: " + item.id);
 	scope.item = item;
 
+#foreach ($attribute in $entity.nonCpkAttributes.list)
+	#if ($attribute.isInFk())
+		#if ($attribute.getXToOneRelation().isManyToOne())
+// fill $attribute.getEntityIPointTo().name combo with data from server side
+${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.getEntityIPointTo().name.substring(1).toLowerCase()}RestService.query({query: '*'}, function success(result){
+	log.info("receiving ${attribute.getEntityIPointTo().name} from server side");
+	scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result;
+	log.info("${attribute.getEntityIPointTo().name} post refresh: " + result.length);
+});
+		#else
+			/* Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! */
+		#end 
+	#end
+#end		
+	
 	/** Creates or updates an item */
 	scope.saveItem = function() {
 		log.info("Creating or updating an item");
