@@ -20,7 +20,9 @@ $output.require($enumAttribute)##
 #end
 
 $output.require($entity.repository)##
-$output.require("com.jaxio.demo.repository.search.*")##
+#if (($entity.hasSimplePk()))
+$output.require("com.jaxio.demo.repository.search.${entity.model.type}SearchRepository")##
+#end
 $output.require("java.util.List")##
 $output.require("java.util.stream.Stream")##
 $output.require("java.net.URISyntaxException")##
@@ -44,9 +46,11 @@ $output.require("org.springframework.http.HttpStatus")##
 $output.require("org.springframework.web.bind.annotation.RequestMapping")##
 $output.require("org.springframework.web.bind.annotation.RequestMethod")##
 $output.require("org.springframework.web.bind.annotation.PathVariable")##
+#if (($entity.hasSimplePk()))
 $output.require("static org.elasticsearch.index.query.QueryBuilders.queryStringQuery")##
 $output.require("java.util.stream.Collectors")##
 $output.require("java.util.stream.StreamSupport")##
+#end
 
 @RestController
 @RequestMapping("/api/${entity.model.vars}")
@@ -56,10 +60,11 @@ public class $output.currentClass{
 
     @Inject
     private $entity.repository.type $entity.repository.var;
-    
+
+#if (($entity.hasSimplePk()))
     @Inject
     private ${entity.model.type}SearchRepository ${entity.model.var}SearchRepository;
-
+#end
     /**
      * Create a new $entity.model.type.
      */
@@ -68,11 +73,10 @@ public class $output.currentClass{
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<$entity.model.type> create(@RequestBody $entity.model.type $entity.model.var) throws URISyntaxException {
         log.debug("Create $entity.model.varUp : {}",$entity.model.var);
-        if (${entity.model.var}.getId() != null) {
-            return ResponseEntity.badRequest().header("Failure","Cannot create ${entity.model.varUp} with existing ID").body(null);
-        }
         $entity.model.type result = ${entity.repository.var}.save($entity.model.var);
+#if (($entity.hasSimplePk()))        
         ${entity.model.var}SearchRepository.save($entity.model.var);
+#end        
         return ResponseEntity.created(new URI("/api/${entity.model.vars}/"+result.getId()))
             .body(result);
     }
@@ -89,7 +93,9 @@ public class $output.currentClass{
             return create(${entity.model.var});
         }
         $entity.model.type result = ${entity.repository.var}.save($entity.model.var);
+#if (($entity.hasSimplePk()))        
         ${entity.model.var}SearchRepository.save($entity.model.var);
+#end        
         return ResponseEntity.ok()
             .body(result);
     }
@@ -140,7 +146,9 @@ public class $output.currentClass{
     public ResponseEntity<Void> delete(@PathVariable $entity.primaryKey.type $entity.primaryKey.var) throws URISyntaxException {
         log.debug("Delete by id $entity.model.varsUp : {}", $entity.primaryKey.var);
         ${entity.repository.var}.delete($entity.primaryKey.var);
+#if (($entity.hasSimplePk()))        
         ${entity.model.var}SearchRepository.delete($entity.primaryKey.var);
+#end        
         return ResponseEntity.ok().build();
     }
     
@@ -151,7 +159,7 @@ public class $output.currentClass{
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable $entity.primaryKey.type[] id) throws URISyntaxException {
         log.debug("Delete by id $entity.model.varsUp : {}", (Object[])id);
-        Stream.of(id).forEach(item -> {${entity.repository.var}.delete(item); ${entity.model.var}SearchRepository.delete(item);}); 
+        Stream.of(id).forEach(item -> {${entity.repository.var}.delete(item); #if (($entity.hasSimplePk()))${entity.model.var}SearchRepository.delete(item);#end}); 
         
         return ResponseEntity.ok().build();
     }
@@ -164,8 +172,9 @@ public class $output.currentClass{
             produces = MediaType.APPLICATION_JSON_VALUE)
     public void indexAll${entity.model.varsUp}() {
     	log.debug("REST request to index all $entity.model.varsUp");
-    	
+#if (($entity.hasSimplePk()))    	
     	${entity.model.var}Repository.findAll().forEach(p -> ${entity.model.var}SearchRepository.index(p));
+#end    	
     }
     
     /**
@@ -175,8 +184,12 @@ public class $output.currentClass{
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public List<$entity.model.type> search${entity.model.type}s(@PathVariable String query) {
+#if (($entity.hasSimplePk()))     	
         return StreamSupport
             .stream(${entity.model.var}SearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
+#else
+		return null;
+#end
     }
 }

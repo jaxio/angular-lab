@@ -71,12 +71,12 @@ $output.webapp("assets/tpl/apps", "edit${entity.model.type}.html")##
 	</div>
 #end
 
-## pk are not updatable
+## pk are not updatable unless there are not auto generated
 #foreach ($attribute in $entity.inPkAttributes.list)
           <div class="form-group">
               <label for="id" class="col-lg-2 control-label">$attribute.varUp</label>
               <div class="col-lg-10">
-                <input type="text" class="form-control" id="${attribute.var}" ng-disabled="true" ng-model="item.${attribute.var}">
+                <input type="text" class="form-control" id="${attribute.var}" #if ($attribute.getJpa().hasIdGeneratorByConvention()) ng-disabled="true" #end ng-model="item.${attribute.var}">
               </div>
          </div>
 #end        
