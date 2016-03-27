@@ -7,7 +7,7 @@ CREATE TABLE APPLI_TRANSLATIONS (
     id                  int not null,
 	language			varchar(10) not null,
     key                varchar(1000) not null,
-    value          blob,
+    value          varchar2(4000),
     primary key (id)
 );
 

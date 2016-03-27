@@ -1,10 +1,76 @@
 ---
 -- Example Schema
 --
+DROP SEQUENCE hibernate_sequence;
 
 CREATE SEQUENCE hibernate_sequence START WITH 1000;
 
+DELETE FROM PARAMETER;
+DELETE FROM CATEGORY;
+DELETE FROM READER;
+DELETE FROM BAR_CODE;
+DELETE FROM BOOK_READER;
+DELETE FROM BOOK;
+DELETE FROM AUTHOR;
+
+ALTER TABLE PARAMETER DROP CONSTRAINT FK_PARAM_REL_CATEGORY;
+ALTER TABLE BOOK_READER DROP constraint book_reader_fk_1;
+ALTER TABLE BOOK_READER DROP constraint book_reader_fk_2;
+ALTER TABLE BOOK_STORE DROP constraint book_store_fk_1;
+ALTER TABLE BOOK_STORE DROP constraint book_store_fk_2;
+ALTER TABLE BOOK DROP constraint book_fk_1;
+ALTER TABLE BOOK DROP constraint book_fk_2;
+ALTER TABLE BOOK DROP constraint book_fk_3;
+ALTER TABLE BOOK DROP CONSTRAINT BAR_CODE_UNIQUE;
+
+DROP TABLE PARAMETER;
+DROP TABLE CATEGORY;
+DROP TABLE SCR;
+
+DROP TABLE BOOK;
 DROP TABLE AUTHOR;
+DROP TABLE BAR_CODE;
+DROP TABLE BOOK_READER;
+DROP TABLE BOOK_STORE;
+DROP TABLE READER;
+DROP TABLE STORE;
+
+
+CREATE TABLE CATEGORY  (
+    PAR_CAT_IDE VARCHAR2(50) NOT NULL,
+    PAR_CAT_DES VARCHAR2(255),
+    
+    PRIMARY KEY (PAR_CAT_IDE)
+);   
+
+CREATE TABLE PARAMETER (
+   	PAR_CAT_IDE VARCHAR2(50) NOT NULL,
+    KEY VARCHAR2(50) NOT NULL,
+    VAL VARCHAR2(4000) NOT NULL,
+    DESCR VARCHAR2(200),
+
+	PRIMARY KEY (PAR_CAT_IDE, KEY),  
+	-- avoid identifier too long in Oracle        
+	CONSTRAINT FK_PARAM_REL_CATEGORY FOREIGN KEY (PAR_CAT_IDE) REFERENCES CATEGORY(PAR_CAT_IDE)
+   );
+
+CREATE TABLE SCR (	
+	SCR_IDE NUMBER(*,0), 
+	SCR_CAT VARCHAR2(50), 
+	SCR_TXT CLOB, 
+	SCR_AVL NUMBER(*,0), 
+	SCR_NME VARCHAR2(50), 
+	SCR_DESCR VARCHAR2(200), 
+	SCR_CODE VARCHAR2(50),
+	
+	primary key (SCR_IDE)
+   ) ;
+ALTER TABLE SCR MODIFY (SCR_IDE NOT NULL ENABLE);
+ 
+
+INSERT INTO CATEGORY  VALUES ('VBS', 'partie VBS');
+
+INSERT INTO PARAMETER  VALUES ('VBS', 'key1', 'val1', 'desc1');
 
 CREATE TABLE AUTHOR (
     id                  int not null,
@@ -13,8 +79,6 @@ CREATE TABLE AUTHOR (
     primary key (id)
 );
 
-DROP TABLE BAR_CODE;
-
 CREATE TABLE BAR_CODE (
     id                          int not null,
     code                        varchar2(100) not null,
@@ -22,25 +86,6 @@ CREATE TABLE BAR_CODE (
 
     primary key (id)
 );
-
-DROP TABLE BOOK;
-
-CREATE TABLE BOOK (
-    id                          char(36) not null,
-    title                       varchar2(100) not null,
-    description                 varchar2(255) not null,
-    publication_date            timestamp,
-    author_id                   int,
-    price                       decimal(20, 2) not null,
-	previousBookId				char(36),
-	barCodeId					int,
-
-    constraint book_fk_1 foreign key (author_id) references AUTHOR,
-    constraint book_fk_2 foreign key (previousBookId) references BOOK(id),
-    constraint book_fk_3 foreign key (barCodeId) references BAR_CODE(id),
-    primary key (id)
-);
-ALTER TABLE BOOK ADD CONSTRAINT BAR_CODE_UNIQUE UNIQUE(barCodeId);
 
 -- book reader
 CREATE TABLE READER (
@@ -62,21 +107,10 @@ CREATE TABLE STORE (
     primary key (id)
 );
 
--- relation table between book and reader
-CREATE TABLE BOOK_READER (
-	id  						int not null,
-	book_id						char(36) not null,
-	reader_id					int,
-	
-	constraint book_reader_fk_1 foreign key (book_id) references BOOK,
-	constraint book_reader_fk_2 foreign key (reader_id) references READER,
-	primary key (id)
-);
-
 -- relation table between book and store
 CREATE TABLE BOOK_STORE (
 	id  						int not null,
-	book_id 					char(36) not null,
+	book_id 					varchar2(36) not null,
 	store_id 					int,
 	
 	constraint book_store_fk_1 foreign key (book_id) references BOOK,
@@ -84,6 +118,36 @@ CREATE TABLE BOOK_STORE (
 	primary key (id)
 );
 
+-- this table last because it is referenced by others.
+CREATE TABLE BOOK (
+    id                          varchar2(36) not null,
+    title                       varchar2(100) not null,
+    description                 varchar2(255) not null,
+    publication_date            timestamp,
+    author_id                   int,
+    price                       decimal(20, 2) not null,
+	previousBookId				varchar2(36),
+	barCodeId					int,
+
+    constraint book_fk_1 foreign key (author_id) references AUTHOR,
+    constraint book_fk_2 foreign key (previousBookId) references BOOK(id),
+    constraint book_fk_3 foreign key (barCodeId) references BAR_CODE(id),
+    primary key (id)
+);
+ALTER TABLE BOOK ADD CONSTRAINT BAR_CODE_UNIQUE UNIQUE(barCodeId);
+
+ALTER TABLE BOOK_STORE ADD constraint book_store_fk_1 foreign key (book_id) references BOOK;
+
+-- relation table between book and reader
+CREATE TABLE BOOK_READER (
+	id  						int not null,
+	book_id						varchar2(36) not null,
+	reader_id					int,
+	
+	constraint book_reader_fk_1 foreign key (book_id) references BOOK,
+	constraint book_reader_fk_2 foreign key (reader_id) references READER,
+	primary key (id)
+);
 
 INSERT INTO AUTHOR  VALUES (1, 'John Doe',null);
 INSERT INTO AUTHOR  VALUES (2, 'Camus albert',null);
