@@ -1,0 +1,84 @@
+$output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Config.html")##
+<section>
+  <div class="page-header">
+    <div class="actions" >
+    </div>
+
+    <h1>
+      <i class="md md-camera"></i>
+      ${entity.model.type} entity
+    </h1>
+    <p class="lead">
+      You can customize this entity...
+    </p>
+  </div>
+</section>
+
+<div>
+
+
+    <div class="table-responsive well no-padding white no-margin">
+      <h3 class="table-title"></h3>
+
+      <table class="table table-full m-b-60" id="table-area-1" fsm-big-data="data of data take 30">
+        <thead>
+        <tr fsm-sticky-header scroll-body="'${pound}table-area-1'" scroll-stop="64">
+          <th>Field</th>
+          <th>Translation</th>
+          <th>Key</th>
+          <th>Composite Key</th>
+          <th>Foreign Key</th>
+          <th>Inv. relation</th>
+          <th>Required</th>
+          <th>Indexed</th>
+          <th>Main</th>
+          <th>EDIT</th>
+         </tr>
+        </thead>
+        <tbody>
+#foreach ($attribute in $entity.attributes.list)
+		  <tr>
+          	<td><b>$attribute.varUp</b></td>
+          	<td>{{ '$attribute.varUp' | translate }}</td>
+          	#if ($attribute.isSimplePk() == true)
+          		<td>$attribute.isSimplePk()</td>
+          	#else
+          		<td>&nbsp;</td>
+          	#end
+          	#if ($attribute.isInCpk() == true)
+          		<td>$attribute.isInCpk()</td>
+          	#else
+          		<td>&nbsp;</td>
+          	#end
+          	#if ($attribute.isSimpleFk() == true)
+          		<td>$attribute.xToOneRelation.getKind() attribute.isSimpleFk() to $attribute.xToOneRelation</td>
+          	#else
+          		<td>&nbsp;</td>
+          	#end
+          	<td>TODO: inverse relation</td>
+          	#if ($attribute.isRequired() == true)
+          		<td>$attribute.isRequired()</td>
+          	#else
+          		<td>&nbsp;</td>
+          	#end          	
+          	#if ($attribute.isIndexed() == true)
+          		<td>$attribute.isIndexed()</td>
+          	#else
+          		<td>&nbsp;</td>
+          	#end
+            <td><input type="checkbox" class="relative" ng-model="item.mainView.${attribute.var}"/></td>
+            <td><input type="checkbox" class="relative" ng-model="item.editView.${attribute.var}"/></td>
+          </tr>
+		  
+#end     
+        </tbody>
+      </table>
+    </div>
+
+<div class="footer-buttons">
+    <div class="btn btn-primary btn-round btn-lg m-r-10 btn-footer" ng-show="(data|filter:{selected: true}).length" ng-click="remove()"  data-title="Remove {{(data|filter:{selected: true}).length}} item(s)" bs-tooltip><i class="md md-delete"></i></div>
+    <div class="btn btn-default btn-round btn-lg m-r-10 btn-footer" scroll-to="top" ng-hide="scroll<100" data-title="{{ 'SCROLL_TO_TOP' | translate }}" bs-tooltip><i class="md md-arrow-drop-up"></i></div>
+    <div class="btn btn-primary btn-round btn-lg" ui-sref="create${entity.model.type}()" data-title="New {{settings.singular}}" bs-tooltip><i class="md md-add"></i></div>
+  </div>
+
+</div>

@@ -1,5 +1,25 @@
 $output.webapp("assets\js\entity", "${entity.model.var}Controller.js")##
 
+#########################################################################################
+## macro that can generate an AngularJS composite key for an URL:  
+## sample: :id 				ou bien 		:keyPart1,:keyPart2
+#########################################################################################
+#macro(generateSimpleOrCompositeKeyForURL2 $ckey	$list)
+	#foreach ($attribute in $list)
+		#if ($attribute.isInCpk() == true)
+			#if ($ckey == "")
+				#set ($ckey = ":$attribute.name")
+			#else
+				#set ($ckey = "$ckey,:$attribute.name")
+			#end
+		#end
+	#end
+	
+	#if ($ckey == "")
+		#set ($ckey = ":id") 
+	#end		
+#end
+
 app.controller("${entity.model.type}Controller", ["${dollar}scope", "${dollar}window", "${dollar}aside", "PlaceholderTextService", 
 "${dollar}log", "${entity.model.type}RestService", "${entity.model.type}RestSearchService", 
 		"${entity.model.type}RestIndexService", "${entity.model.type}RestMassDeleteService",
@@ -147,7 +167,7 @@ var crudAside = c({
 /** defines the search aside */
 var searchAside = c({
 	scope: scope,
-	template: "assets/tpl/apps/crud-${entity.model.var}-search.html",
+	template: "assets/tpl/apps/${entity.model.var}/${entity.model.var}Search.html",
 	show: !1,
 	placement: "left",
 	backdrop: !1,
@@ -187,11 +207,13 @@ scope.editItem = function(item) {
 };
 
 /** Opens and fills the CRUD aside with an item in VIEW mode */
+/* deprecated
 scope.viewItem = function(b) {
 	scope.loadOneItem(b.id);
 	
 	b && (b.editing = !1, scope.item = b, scope.settings.cmd = "View", showForm(crudAside))
 };
+*/
 
 /** Opens the CRUD aside in CREATION mode */
 scope.createItem = function() {
@@ -357,19 +379,29 @@ scope.${dollar}on("${dollar}destroy", function() {
 	})
 }]);
 
+#set ($str1 = "")
+#set ($str2 = "")
+#set ($str3 = "")
+#set ($str4 = "")
+#set ($str5 = "")
+#set ($str6 = "")
+#set ($str7 = "")
+#set ($str8 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
 /** main REST client for managing (4 CRUD calls) ${entity.model.type} entity */
 app.factory('${entity.model.type}RestService', function (${dollar}resource) {
-	return ${dollar}resource('api/${entity.model.vars}/:id', {}, {
+	return ${dollar}resource('api/${entity.model.vars}/?page=0&size=1000', {}, {
 		'query': { method: 'GET', isArray: true},
 		'get': {
 			method: 'GET',
+			url: 'api/${entity.model.vars}/$str6',
 			transformResponse: function (data) {
 				data = angular.fromJson(data);
 				return data;
 			}
 		},
 		'update': { method:'PUT' },
-		'delete': { method:'DELETE' }
+		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' }
 	});
 });
 
@@ -394,7 +426,32 @@ app.factory('${entity.model.type}RestMassDeleteService', function (${dollar}reso
 	});
 });
 
-## --------------- Many to many
+## --------------- One to one
+#if ($entity.oneToOne.list.size() > 0)
+	/** REST client for managing linked entities for ${entity.model.type} entity */
+	app.factory('${entity.model.type}LinkedEntitiesService', function (${dollar}resource) {
+	#foreach ($relation in $entity.oneToOne.list)	
+		#if ($velocityCount == 1)
+			## --------------- return statement only once
+		return ${dollar}resource('api/${relation.to.vars}/${relation.to.vars}By${entity.model.type}sId/:id', {}, {
+	        'query${relation.to.varsUp}By${entity.model.type}sId': {
+	        	method: 'GET',
+	        	url: 'api/${relation.to.vars}/${relation.to.vars}By${entity.model.type}sId/:id',
+	        	isArray: true
+	        }
+		#else
+			,
+	        'query${relation.to.varsUp}By${entity.model.type}sId': {
+	        	method: 'GET',
+	        	url: 'api/${relation.to.vars}/${relation.to.vars}By${entity.model.type}sId/:id',
+	        	isArray: true
+	        }
+		#end	
+	#end
+	    })});
+#end
+
+## --------------- Many to many; WARNING: the code below is a copy of the one above
 #if ($entity.manyToMany.list.size() > 0)
 	/** REST client for managing linked entities for ${entity.model.type} entity */
 	app.factory('${entity.model.type}LinkedEntitiesService', function (${dollar}resource) {
@@ -418,3 +475,14 @@ app.factory('${entity.model.type}RestMassDeleteService', function (${dollar}reso
 	#end
 	    })});
 #end
+
+## --------------- Inverse relation PROTOTYPE
+/** REST client for managing inverse relation */
+app.factory('${entity.model.type}RestInvRelationService', function (${dollar}resource) {
+	return ${dollar}resource('api/void/:id', {}, {
+		'void': { method: 'GET'}
+#if (${entity.model.type} == "Author")		
+		,'findByAuthor': { method: 'GET', isArray: true, url: 'api/books/findByAuthor/:id'}
+#end		
+	});
+});

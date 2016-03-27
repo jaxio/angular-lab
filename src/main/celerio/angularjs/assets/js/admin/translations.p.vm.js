@@ -27,13 +27,17 @@ app.config(['${dollar}translateProvider', function (${dollar}translateProvider) 
       	'REFRESH_GRID': 'Refresh the grid',
       	'CLEAR_GRID': 'Clear the grid',
       	'INDEX_ITEMS': 'Index all items',
+      	'CONFIG_ENTITY': 'Configure this entity',
       	'VIEW_ITEM': 'View item',
       	'EDIT_ITEM': 'Edit item',
       	'DELETE_ITEM': 'Delete item',
       	'ADD_ITEM': 'Add an item',
       	'SAVE': 'Save',
       	'SCROLL_TO_TOP': 'Scroll to top',
-      	'CLOSE': 'Close this aside'
+      	'CLOSE': 'Close this aside',
+      	'MORE_TOOLTIP': 'Click here to see more',
+      	'MORE': 'More',
+      	'LESS': 'Less'
   	});
  
  	${dollar}translateProvider.translations('fr', {

@@ -1,4 +1,15 @@
-$output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
+$output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html")##
+
+#set ($str1 = "")
+#set ($str2 = "")
+#set ($str3 = "")
+#set ($str4 = "")
+#set ($str5 = "")
+#set ($str6 = "")
+#set ($str7 = "")
+#set ($str8 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
+
 <section>
   <div class="page-header">
     <div class="actions" >
@@ -8,6 +19,8 @@ $output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
       
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="clear()" data-title="{{ 'CLEAR_GRID' | translate }}" bs-tooltip><span class="md md-clear"></span></button>
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="index()" data-title="{{ 'INDEX_ITEMS' | translate }}" bs-tooltip><span class="md md-settings"></span></button>
+      
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ui-sref="config${entity.name}()" data-title="{{ 'CONFIG_ENTITY' | translate }}" bs-tooltip><span class="md md-settings"></span></button>
       
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-csv="getCSVData()" field-separator=";" lazy-load="true" charset="utf-8" filename="${entity.model.var}Data.csv" csv-label="true" data-title="export the grid"><span class="md md-download"></span></button>
       
@@ -36,10 +49,20 @@ $output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
         <tr fsm-sticky-header scroll-body="'${pound}table-area-1'" scroll-stop="64">
           <th><input type="checkbox" class="relative" ng-model="selectAll" ng-click="checkAll()" /></th>
           <th>Icon</th>
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-	#if (!$attribute.isInFk())
+#if (($entity.hasSimplePk()))
+			<th fsm-sort="$entity.getPrimaryKey().getAttribute().var">$entity.getPrimaryKey().getAttribute().varUp</th>
+#else
+		<th>Id composite</th>
+#end			
+#foreach ($attribute in $entity.attributes.list)
+	#if (!$attribute.isInFk() && !$attribute.isInCpk() && !$attribute.isInPk())
 		  <th fsm-sort="$attribute.var">$attribute.varUp</th>
 	#end
+#end
+
+## --------------- One to one: header in the table
+#foreach ($relation in $entity.oneToOne.list)
+		  <th fsm-sort="${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()">$relation.to.varUp</th>
 #end
 ## --------------- Many to one
 #foreach ($relation in $entity.manyToOne.list)
@@ -52,22 +75,37 @@ $output.webapp("assets/tpl/apps", "${entity.model.var}.html")##
           <tr ng-repeat="(key, item) in data" ng-click="item.selected=!item.selected"  ng-dblclick="editItem(item)">
             <td><input type="checkbox" class="relative" ng-model="item.selected" ng-click="${dollar}event.stopPropagation()" /></td>
             <td ng-bind-html="item.icon" class="f20"></td>
+#if (($entity.hasSimplePk()))
+			<td>{{item.${entity.getPrimaryKey().getAttribute().var}}}</td>
+#else
+		<td>$str7</td>
+#end	            
 #foreach ($attribute in $entity.nonCpkAttributes.list)
-	#if (!$attribute.isInFk())
+	#if (!$attribute.isInFk() && !$attribute.isInCpk() && !$attribute.isInPk())
 		#if ($attribute.type == "Date")
-			<td>{{item.${attribute.var} | date:"dd/MM/yyyy"}}</td>		
+			<td>{{item.${attribute.var} | date:"dd/MM/yyyy"}}</td>
+		#elseif ($attribute.mappedType == "M_CLOB")
+			<td><div ng-init="limit = 50; moreShown = false; lessShown = false;">
+    			{{item.${attribute.var} | limitTo: limit}}
+    			<a ng-show="item.${attribute.var}.length > limit" href ng-click="limit=item.${attribute.var}.length; moreShown = true; lessShown = true;" data-title="{{ 'MORE_TOOLTIP' | translate }}" bs-tooltip>...  <b>{{ 'MORE' | translate }}</b></a>    			
+    			<a ng-show="lessShown == true" href ng-click="limit=50; moreShown = false; lessShown = false">  <b>{{ 'LESS' | translate }}</b></a>
+				</div></td>			
 		#else
 		    <td>{{item.${attribute.var}}}</td>
 		#end
 	#end	    
 #end
+## --------------- One to one: value inside the table
+#foreach ($relation in $entity.oneToOne.list)
+		  <td><a ui-sref="edit${relation.to.varUp}()">{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</a></td>
+#end
 ## --------------- Many to one
 #foreach ($relation in $entity.manyToOne.list)
-		  <td>{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</td>
+		  <td><a ui-sref="edit${relation.to.varUp}()">{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</a></td>
 #end		
             <td class="text-right" ng-click="${dollar}event.stopPropagation()">
-              <button type="button" class="btn btn-link btn-round" data-title="{{ 'EDIT_ITEM' | translate }}" ui-sref="edit${entity.model.type}({id:item.id})" bs-tooltip><i class="md md-edit"></i></button>
-              <button type="button" class="btn btn-link btn-round" data-title="{{ 'VIEW_ITEM' | translate }}" ng-click="viewItem(item)" bs-tooltip><i class="md md-search"></i></button>
+              <button type="button" class="btn btn-link btn-round" data-title="{{ 'EDIT_ITEM' | translate }}" ui-sref="edit${entity.model.type}(#if (($entity.hasSimplePk())) {id:item.id} #else $str8 #end)" bs-tooltip><i class="md md-edit"></i></button>
+              <button type="button" class="btn btn-link btn-round" data-title="{{ 'VIEW_ITEM' | translate }}" ui-sref="view${entity.model.type}(#if (($entity.hasSimplePk())) {id:item.id} #else $str8 #end)" bs-tooltip><i class="md md-search"></i></button>
               <button type="button" class="btn btn-link btn-round" data-title="{{ 'DELETE_ITEM' | translate }}" ng-click="remove(item)" bs-tooltip><i class="md md-delete"></i></button>
             </td>
           </tr>

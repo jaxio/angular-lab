@@ -1,34 +1,50 @@
 $output.webapp("assets\js\entity", "${entity.model.var}EditController.js")##
 
+#set ($str1 = "")
+#set ($str2 = "")
+#set ($str3 = "")
+#set ($str4 = "")
+#set ($str5 = "")
+#set ($str6 = "")
+#set ($str7 = "")
+#set ($str8 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
+
 app.controller("${entity.model.type}EditController", ["${dollar}scope", "${dollar}window", "${dollar}aside", 
 "${dollar}log", "${entity.model.type}RestService", 
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-#if ($attribute.isInFk())
+#foreach ($attribute in $entity.allAttributes.list)
+#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))
 	#if ($attribute.getXToOneRelation().isManyToOne())
+		"${attribute.getEntityIPointTo().name}RestService",
+	#elseif ($attribute.getXToOneRelation().isOneToOne())
 		"${attribute.getEntityIPointTo().name}RestService",
 	#else
 		/* Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! */
 	#end 
 #end
 #end
-		"${dollar}alert", "${dollar}timeout", "item", function(scope, window, aside, log, 
+		"${entity.model.type}RestInvRelationService", "${dollar}alert", "${dollar}timeout", "item", "mode", function(scope, window, aside, log, 
 		${entity.model.var}RestService, 
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-	#if ($attribute.isInFk())
+#foreach ($attribute in $entity.allAttributes.list)
+	#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))
 		#if ($attribute.getXToOneRelation().isManyToOne())
+			$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1).toLowerCase()RestService,
+		#elseif ($attribute.getXToOneRelation().isOneToOne())
 			$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1).toLowerCase()RestService,
 		#else
 			/* Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! */
 		#end 
 	#end
 #end		
-		alertService, timeoutService, item) {
+		${entity.model.var}RestInvRelationService, alertService, timeoutService, item, mode) {
 	
-	log.info("inside ${entity.model.type}EditController, item id: " + item.id);
+	log.info("inside ${entity.model.type}EditController, mode: " + mode);
+	log.info("inside ${entity.model.type}EditController, item: " + item);
+	scope.mode = mode;
 	scope.item = item;
 
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-	#if ($attribute.isInFk())
+#foreach ($attribute in $entity.allAttributes.list)
+	#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))
 		#if ($attribute.getXToOneRelation().isManyToOne())
 // fill $attribute.getEntityIPointTo().name combo with data from server side
 ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.getEntityIPointTo().name.substring(1).toLowerCase()}RestService.query({query: '*'}, function success(result){
@@ -36,11 +52,31 @@ ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.ge
 	scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result;
 	log.info("${attribute.getEntityIPointTo().name} post refresh: " + result.length);
 });
+		#elseif ($attribute.getXToOneRelation().isOneToOne())
+	// fill $attribute.getEntityIPointTo().name combo with data from server side
+	${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.getEntityIPointTo().name.substring(1).toLowerCase()}RestService.query({query: '*'}, function success(result){
+		log.info("receiving ${attribute.getEntityIPointTo().name} from server side");
+		scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result;
+		log.info("${attribute.getEntityIPointTo().name} post refresh: " + result.length);
+	});
 		#else
-			/* Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! */
+			// Type of relation [$attribute.getXToOneRelation()] not implemented yet !!!! 
 		#end 
 	#end
 #end		
+	
+## --------------- Inverse relation PROTOTYPE
+#if (${entity.model.type} == "Author")
+	${entity.model.var}RestInvRelationService.findByAuthor({id: item.id}, function(result) {
+		scope.findByAuthor = result;
+		log.info("data post refresh: " + scope.findByAuthor.length);
+	});
+#end	
+
+	/** Clear item */
+	scope.clear = function () {
+			scope.item = null;
+	};
 	
 	/** Creates or updates an item */
 	scope.saveItem = function() {
@@ -92,22 +128,41 @@ ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.ge
 		
 		if (scope.item.id != null) {
 			// update mode
+			console.log("update mode");
+			#if (!$entity.hasSimplePk())
+				#foreach ($attribute in $entity.getPrimaryKey().getAttributes())
+					#if ($attribute.isSimpleFk() == true)
+						scope.item.id.${attribute.var}  = scope.item.${attribute.var}.id;
+					#else
+						scope.item.${attribute.var} = scope.item.id.${attribute.var};
+					#end
+				#end
+			#end	
 			${entity.model.var}RestService.update(scope.item, onSaveSuccess, onSaveError);
 		} else {
 			// creation mode
+			console.log("creation mode");
 			${entity.model.var}RestService.save(scope.item, onSaveSuccess, onSaveError);
 		}
 	};
 
 	/** Removes one item or a list of items (selected ones) */
-	scope.remove = function(b) {
-		console.log(scope.selectAll);
+	scope.remove = function(item) {
+		
 		var r = confirm("Are you sure ?");
 		if (r == true) {
-			if (b) {				
+			if (item) {				
 				// one item deletion mode
-				${entity.model.var}RestService.delete({id: b.id}, function success(data) {
-					scope.refresh();
+				#set ($key = "{id: item.id}")
+				#if (!$entity.hasSimplePk())
+					#set ($key = $str8)
+					#foreach ($attribute in $entity.getPrimaryKey().getAttributes())
+						console.log("cpk: " + item.id.$attribute.var);
+					#end
+				#end
+				${entity.model.var}RestService.delete($key, function success(data) {
+					scope.clear();
+					alert('item deleted');
 				}, function failure(err) {
 					alert('request failed');
 				});

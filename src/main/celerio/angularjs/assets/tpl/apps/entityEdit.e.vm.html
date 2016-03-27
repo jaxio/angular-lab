@@ -1,0 +1,261 @@
+$output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.html")##
+<section class="forms-basic">
+  <div class="page-header">
+    <h1>
+      <i class="md md-input"></i>
+      ${entity.model.type} form
+    </h1>
+    <p class="lead">
+      You can edit ${entity.model.type} entity and see linked entities.
+    </p>
+  </div>
+
+<div class="row m-b-40">
+
+    <div class="col-md-3 col-md-push-9">
+      <h5>Mode</h5>
+      <p>mode: {{mode}}</p>
+    </div>
+    <div class="col-md-8 col-md-pull-3">
+      <div class="well">
+        <form class="form-horizontal">
+          <fieldset>
+            <legend>Main entity</legend>          
+            <span class="help-block m-b-20">Please fill out the following form below.</span>
+
+#foreach ($attribute in $entity.nonCpkAttributes.list)
+
+	## manage simple attribute		
+	#if (!$attribute.isInPk()  && !$attribute.isInFk())
+			<div class="form-group">
+              <label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
+              <div class="col-lg-10">
+		#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger" || $attribute.type == "String")
+			#if ($attribute.mappedType == "M_CLOB")
+				#if ($attribute.isNotNullable() == true)
+					#set($requiredTag = "required")
+				#else
+					#set($requiredTag = "")
+				#end
+				<textarea class="form-control vertical" rows="3" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag></textarea>
+			#else       
+				#if ($attribute.isNotNullable() == true)
+					#set($requiredTag = "required")
+				#else
+					#set($requiredTag = "")
+				#end     
+               <input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag>
+            #end          
+		#elseif ($attribute.type == "Date")
+			<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" data-autoclose="1" bs-datepicker>
+		#else
+        	<p>Type [$attribute.type] not implemented yet !!!!</p>
+        #end
+        	</div>
+           </div>
+    #end
+#end
+
+## manage foreign key attribute (complex attribute): display them as combo list (mono-selection)
+## OneToOne attributes (displayed as combo)
+#foreach ($oneToOne in $entity.oneToOne.list)
+	<div class="form-group filled">
+	
+            <label class="col-lg-2 control-label">${oneToOne.to.type}</label>
+            <div class="col-lg-10">     	
+            <ui-select ng-model="item.$oneToOne.to.var" theme="select2" title="Choose an $oneToOne.to.var" search-enabled="false">
+#foreach ($toAttribute in $oneToOne.getToEntity().getAttributes().list)  
+	 #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())          
+                <ui-select-match placeholder="Choose an $oneToOne.to.var">{{${dollar}select.selected.$toAttribute.name}}</ui-select-match>
+     	#break           
+     #end
+#end                
+                <ui-select-choices repeat="itemA in ${oneToOne.to.type.substring(0,1).toLowerCase()}${oneToOne.to.type.substring(1)}s | filter: ${dollar}select.search">
+#foreach ($toAttribute in $oneToOne.getToEntity().getAttributes().list)
+                #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())
+                  	<div ng-bind-html="itemA.$toAttribute.name | highlight: ${dollar}select.search"></div>
+                  	#break
+                #end
+#end
+#foreach ($toPk in $oneToOne.getToEntity().getInPkAttributes().list)
+                  		<small ng-bind-html="itemA.$toPk.name | highlight: ${dollar}select.search"></small>
+#end                  	
+                </ui-select-choices>
+             </ui-select>
+             </div>
+	</div>
+#end
+
+## ManyToOne attributes (displayed as combo); WARNING: this code is a copy of the one above for oneToOne relations
+#foreach ($manyToOne in $entity.manyToOne.list)
+	<div class="form-group filled">
+	
+            <label class="col-lg-2 control-label"><a ui-sref="edit${manyToOne.getToEntity().model.type}({id:1})">${manyToOne.to.type}</a></label>
+            <div class="col-lg-10">     	
+            <ui-select ng-model="item.$manyToOne.to.var" theme="select2" title="Choose an $manyToOne.to.var" search-enabled="false">
+#foreach ($toAttribute in $manyToOne.getToEntity().getAttributes().list)  
+	 #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())          
+                <ui-select-match placeholder="Choose an $manyToOne.to.var">{{${dollar}select.selected.$toAttribute.name}}</ui-select-match>
+     	#break           
+     #end
+#end                
+                <ui-select-choices repeat="itemA in ${manyToOne.to.type.substring(0,1).toLowerCase()}${manyToOne.to.type.substring(1)}s | filter: ${dollar}select.search">
+#foreach ($toAttribute in $manyToOne.getToEntity().getAttributes().list)
+                #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())
+                  	<div ng-bind-html="itemA.$toAttribute.name | highlight: ${dollar}select.search"></div>
+                  	#break
+                #end
+#end
+#foreach ($toPk in $manyToOne.getToEntity().getInPkAttributes().list)
+                  		<small ng-bind-html="itemA.$toPk.name | highlight: ${dollar}select.search"></small>
+#end                  	
+                </ui-select-choices>
+             </ui-select>
+             </div>
+	</div>
+#end
+
+## pk are not updatable unless there are not auto generated
+#foreach ($attribute in $entity.inPkAttributes.list)
+#if ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true)
+## this attribut is already on FK part of the page, so don't put it twice
+#else
+          <div class="form-group">
+              <label for="id" class="col-lg-2 control-label">#if (!$attribute.isSimplePk())Id#end $attribute.varUp</label>
+              <div class="col-lg-10">
+                <input type="text" class="form-control" id="${attribute.var}" #if ($attribute.getJpa().hasIdGeneratorByConvention()) ng-disabled="true" #end ng-model="item#if(!$attribute.isSimplePk()).id#end.${attribute.var}">
+              </div>
+         </div>
+#end         
+#end        
+            
+
+            <div class="form-group">
+              <div class="col-lg-10 col-lg-offset-2">
+              	<button type="submit" class="btn btn-primary" ui-sref="$entity.name.toLowerCase()">back to List</button>
+                <button type="reset" class="btn btn-default" ng-click="remove(item)">Delete</button>
+                <button type="submit" class="btn btn-primary" ng-click="saveItem(item)">Save</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+</section>
+
+<section class="tables-data">
+
+  <div class="page-header">
+    <h1>
+      <i class="md md-list"></i>
+      Linked entities
+    </h1>
+    <p class="lead">
+      Todo
+    </p>
+  </div>
+
+## --------------- Many to many: to entity
+#foreach ($relation in $entity.manyToMany.list)
+  <div class="card">
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="table-title p-20">${relation.to.varUp}: {{item.${relation.to.var}s.length}} rows</h3>
+      </div>
+      <div class="col-md-6">
+        <div class="table-search">
+          <input type="text" ng-model="tableParams.filter()['search']" class="form-control" placeholder="Search data"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive white">
+
+      <table ng-table="tableParams" template-pagination="assets/tpl/partials/data-table-pager.html" class="table table-full table-full-small">
+        <tr ng-repeat="item in item.${relation.to.var}s">
+#foreach ($attribute in $relation.toEntity.nonCpkAttributes.list)
+	##if (!$attribute.isInPk()  && !$attribute.isInFk())
+	#if ($velocityCount == 1)
+	## add a link on the first column
+		  <td data-title="'${attribute.name}'" filter="{ '${attribute.var}': 'text' }" sortable="'${attribute.var}'"><a ui-sref="edit${relation.to.varUp}({id:item.id})">{{item.${attribute.var}}}</a></td>
+	#else
+		  <td data-title="'${attribute.name}'" filter="{ '${attribute.var}': 'text' }" sortable="'${attribute.var}'">{{item.${attribute.var}}}</td>	
+	#end	  
+	##end
+#end
+        </tr>
+      </table>
+
+    </div>
+
+  </div>
+#end
+
+## --------------- relation in the other way
+<section class="tables-data">
+
+  <div class="page-header">
+    <h1>
+      <i class="md md-list"></i>
+      Linked entities (inverse relation)
+    </h1>
+    <p class="lead">
+      Todo
+    </p>
+  </div>
+#foreach ($entityP in $project.getEntities().list)
+	#foreach ($rel in $entityP.getRelations().list)
+		#if ($entity == $rel.getToEntity())
+			#if ($rel.getKind() == "many-to-one" || $rel.getKind() == "many-to-many" || $rel.getKind() == "one-to-one")
+				-- on a une relation MTO/OTO/MTM vers notre entite $entity, il faudra faire une table HTML contenant la liste des $entityP.name liés avec des liens pour y descendre
+				-- il faudra un REST sur les $entityP.name pour lister les $entityP.name liés à $entity
+				-- Exemple: get${entityP.name}By${entity}ID
+  <div class="card">
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="table-title p-20">TODO inverse relation to: ${rel}</h3>
+      </div>
+      <div class="col-md-6">
+        <div class="table-search">
+          <input type="text" ng-model="tableParams.filter()['search']" class="form-control" placeholder="Search data"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive white">
+
+      <table ng-table="tableParams" template-pagination="assets/tpl/partials/data-table-pager.html" class="table table-full table-full-small">
+## --------------- Inverse relation PROTOTYPE
+#if (${entity.model.type} == "Author")      
+        <tr ng-repeat="row in findByAuthor">
+#foreach ($attribute in $project.getEntityByName("Book").attributes.list)
+	#if ($velocityCount == 1)
+	## add a link on the first column
+		  <td data-title="'${attribute.name}'" filter="{ '${attribute.var}': 'text' }" sortable="'${attribute.var}'"><a ui-sref="editBook({id:row.id})">{{row.${attribute.var}}}</a></td>
+	#else
+		  <td data-title="'${attribute.name}'" filter="{ '${attribute.var}': 'text' }" sortable="'${attribute.var}'">{{row.${attribute.var}}}</td>	
+	#end	  
+#end
+#else
+	<p>Manque encore les données</p>
+#end
+        </tr>		        
+      </table>
+
+    </div>
+
+  </div>		
+			#end
+		#end
+	#end
+#end
+
+</section>
+
+
+

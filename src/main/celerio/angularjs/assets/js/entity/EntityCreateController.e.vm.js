@@ -2,8 +2,8 @@ $output.webapp("assets\js\entity", "${entity.model.var}CreateController.js")##
 
 app.controller("${entity.model.type}CreateController", ["${dollar}scope", "${dollar}window", "${dollar}aside", 
 "${dollar}log", "${entity.model.type}RestService", 
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-#if ($attribute.isInFk())
+#foreach ($attribute in $entity.allAttributes.list)
+#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))
 	#if ($attribute.getXToOneRelation().isManyToOne())
 		"${attribute.getEntityIPointTo().name}RestService",
 	#else
@@ -13,8 +13,8 @@ app.controller("${entity.model.type}CreateController", ["${dollar}scope", "${dol
 #end
 		"${dollar}alert", "${dollar}timeout", function(scope, window, aside, log, 
 		${entity.model.var}RestService, 
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-	#if ($attribute.isInFk())
+#foreach ($attribute in $entity.allAttributes.list)
+	#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))
 		#if ($attribute.getXToOneRelation().isManyToOne())
 			$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1).toLowerCase()RestService,
 		#else
@@ -24,8 +24,8 @@ app.controller("${entity.model.type}CreateController", ["${dollar}scope", "${dol
 #end		
 		alertService, timeoutService) {
 
-#foreach ($attribute in $entity.nonCpkAttributes.list)
-	#if ($attribute.isInFk())
+#foreach ($attribute in $entity.allAttributes.list)
+	#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))		
 		#if ($attribute.getXToOneRelation().isManyToOne())
 // fill $attribute.getEntityIPointTo().name combo with data from server side
 ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.getEntityIPointTo().name.substring(1).toLowerCase()}RestService.query({query: '*'}, function success(result){

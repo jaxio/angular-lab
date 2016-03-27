@@ -7,9 +7,11 @@ security:
         enabled: false
 
 spring:
+    profiles:
+        active: dev
     application:
         admin:
-            enabled: true # Enable admin features for the application.
+            enabled: false # Enable admin features for the application.
     datasource: # primary datasource
         driver-class-name: @jdbc.driver@
         url: @jdbc.url@
@@ -29,7 +31,22 @@ spring:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
+    jta:
+        default-jta-timeout: 300000
+        max-timeout: 300000
+        atomikos:
+            datasource:
+                min-pool-size: 20
+                max-pool-size: 20
+# ORACLE seulement                test-query: select 1 from dual
     data:
+        rest:
+            default-page-size: 10 # Default size of pages
+            max-page-size: 1000 # Maximum size of pages.
+            page-param-name: page
+            limit-param-name: size
+            sort-param-name: sort
+#basePath: /api
         elasticsearch:
             cluster-name:
             cluster-nodes:

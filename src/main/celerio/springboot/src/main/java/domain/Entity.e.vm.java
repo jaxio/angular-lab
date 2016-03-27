@@ -228,8 +228,22 @@ $output.require("$entity.collectionType.implementationFullType")##
 #foreach ($annotation in $attribute.validation.annotations)
     $annotation
 #end
+#set ($generatedValueMissing = true)
+#set ($isIdField = false)
 #foreach ($annotation in $attribute.jpa.annotations)
-    $annotation
+	#if ($annotation.length() >= 15 && $annotation.substring(0,15) == "@GeneratedValue")
+		#set ($generatedValueMissing = false)
+	#end	
+	#if ($annotation == "@Id")
+		#set ($isIdField = true)
+	#end
+	$annotation
+#end
+## Tips ORACLE: auto generated id
+#if ($isIdField == true && $generatedValueMissing == true)
+	$output.require("javax.persistence.GeneratedValue")##
+	$output.require("javax.persistence.GenerationType")##
+	@GeneratedValue(strategy = GenerationType.AUTO)
 #end
 #foreach ($annotation in $attribute.formatter.annotations)
     $annotation
@@ -289,6 +303,9 @@ $output.require("$entity.collectionType.implementationFullType")##
 #foreach ($annotation in $relation.jpa.annotations)
     $annotation
 #end
+$output.require("org.hibernate.annotations.NotFound")##
+$output.require("org.hibernate.annotations.NotFoundAction")##
+	@NotFound(action = NotFoundAction.IGNORE)
     public $relation.to.type ${relation.to.getter}() {
         return $relation.to.var;
     }
@@ -335,6 +352,9 @@ $output.require("$entity.collectionType.implementationFullType")##
 #foreach ($annotation in $relation.jpa.annotations)
     $annotation
 #end
+$output.require("org.hibernate.annotations.NotFound")##
+$output.require("org.hibernate.annotations.NotFoundAction")##
+	@NotFound(action = NotFoundAction.IGNORE)
     public $relation.to.type ${relation.to.getter}() {
         return $relation.to.var;
     }
@@ -464,6 +484,9 @@ $output.require("$entity.collectionType.implementationFullType")##
 #foreach ($annotation in $relation.jpa.annotations)
     $annotation
 #end
+$output.require("org.hibernate.annotations.NotFound")##
+$output.require("org.hibernate.annotations.NotFoundAction")##
+	@NotFound(action = NotFoundAction.IGNORE)
     public ${entity.collectionType.type}<$relation.to.type> ${relation.to.getters}() {
         return $relation.to.vars;
     }
@@ -530,6 +553,9 @@ $output.require("$entity.collectionType.implementationFullType")##
 #foreach ($annotation in $relation.jpa.annotations)
     $annotation
 #end
+$output.require("org.hibernate.annotations.NotFound")##
+$output.require("org.hibernate.annotations.NotFoundAction")##
+	@NotFound(action = NotFoundAction.IGNORE)
     public ${entity.collectionType.type}<$relation.to.type> ${relation.to.getters}() {
         return $relation.to.vars;
     }

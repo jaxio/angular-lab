@@ -31,10 +31,25 @@ $output.require($attribute)##
     private $attribute.type $attribute.var;
 #end
 
+    /**
+     * Simple constructor.
+     */
     public ${output.currentClass}() {
     }
 
-    public ${output.currentClass}(#foreach ($attribute in $primaryKey.attributes)$attribute.type $attribute.var#if($velocityHasNext), #end#end) {
+#set ($str1 = "")
+#set ($str2 = "")
+#set ($str3 = "")
+#set ($str4 = "")
+#set ($str5 = "")
+#set ($str6 = "")
+#set ($str7 = "")
+#set ($str8 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $primaryKey.entity.attributes.list)    
+    /**
+     * Constructor with each part of the composite key as a parameter.
+     */
+    public ${output.currentClass}($str5) {
 #foreach ($attribute in $primaryKey.attributes)
         this.$attribute.var = $attribute.var;
 #end
