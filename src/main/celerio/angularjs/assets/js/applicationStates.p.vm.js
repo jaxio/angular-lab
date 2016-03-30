@@ -179,7 +179,14 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 		.state('config${entity.name}', {
 			url: "/${entity.model.var}Config",
 	    	templateUrl: "assets/tpl/apps/${entity.model.var}/${entity.model.var}Config.html",
-			controller: function(${dollar}scope){}
+			controller: "${entity.name}ConfigController",
+			resolve: {
+				config : ['${dollar}stateParams', 'AppParameterRestService', '${dollar}log', function(${dollar}stateParams, appParameterRestService, log) {
+					return appParameterRestService.getParameter({domain: 'TEST', key: 'test'}, function success(result) {}, function failure(result){
+						log.info("something goes wrong !");
+						}).${dollar}promise;
+                    }]
+				}
 	});
 #end
 });

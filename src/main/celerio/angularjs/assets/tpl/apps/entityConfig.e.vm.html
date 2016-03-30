@@ -66,8 +66,8 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Config
           	#else
           		<td>&nbsp;</td>
           	#end
-            <td><input type="checkbox" class="relative" ng-model="item.mainView.${attribute.var}"/></td>
-            <td><input type="checkbox" class="relative" ng-model="item.editView.${attribute.var}"/></td>
+            <td><input type="checkbox" class="relative" ng-model="config.${attribute.var}"/></td>
+            <td><input type="checkbox" class="relative" ng-model="config.${attribute.var}"/></td>
           </tr>
 		  
 #end     

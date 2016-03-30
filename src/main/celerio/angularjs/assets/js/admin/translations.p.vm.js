@@ -37,7 +37,12 @@ app.config(['${dollar}translateProvider', function (${dollar}translateProvider) 
       	'CLOSE': 'Close this aside',
       	'MORE_TOOLTIP': 'Click here to see more',
       	'MORE': 'More',
-      	'LESS': 'Less'
+      	'LESS': 'Less',
+      	
+      	// menu
+      	'MENU_ENTITIES': 'Entities',
+      	'MENU_CONFIGURATION': 'Configuration',
+      	'MENU_ADMINISTRATION': 'Administration'
   	});
  
  	${dollar}translateProvider.translations('fr', {

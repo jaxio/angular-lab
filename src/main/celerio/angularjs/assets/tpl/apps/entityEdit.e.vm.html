@@ -31,6 +31,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
               <label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
               <div class="col-lg-10">
 		#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger" || $attribute.type == "String")
+			## we have to deal with LOB field
 			#if ($attribute.mappedType == "M_CLOB")
 				#if ($attribute.isNotNullable() == true)
 					#set($requiredTag = "required")
@@ -38,13 +39,18 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 					#set($requiredTag = "")
 				#end
 				<textarea class="form-control vertical" rows="3" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag></textarea>
-			#else       
+			#else
+				## we have to deal with simple field       
 				#if ($attribute.isNotNullable() == true)
 					#set($requiredTag = "required")
 				#else
 					#set($requiredTag = "")
-				#end     
-               <input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag>
+				#end
+				#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger")
+					<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag ng-pattern="/^\d{0,18}(\.\d{1,2})?$/">  
+				#else  
+               		<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag>
+               	#end
             #end          
 		#elseif ($attribute.type == "Date")
 			<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" data-autoclose="1" bs-datepicker>

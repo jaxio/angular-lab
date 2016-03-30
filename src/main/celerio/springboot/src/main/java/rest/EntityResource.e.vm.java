@@ -10,7 +10,7 @@ $output.java($entity.rest)##
 #if($entity.hasUniqueBigIntegerAttribute())
 $output.require("java.math.BigInteger")##
 #end
-#if($entity.hasUniqueDateAttribute()||$entity.root.hasDatePk())
+#if($entity.hasUniqueDateAttribute() || $entity.root.hasDatePk() || !$entity.getCpkDateAttributes().isEmpty())
 $output.require("java.util.Date")##
 #end
 $output.require($entity.model)##
@@ -319,6 +319,23 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
         List<Book> books = bookRepository.search(book.getTitle() + "%", book.getDescription() + "%", book.getPrice());
         //log.debug("There are " + page.getTotalElements() + " books.");
         return new ResponseEntity<>(books, new HttpHeaders(), HttpStatus.OK);
+    }
+#end
+
+## dedicated method for system entities
+#if ($entity.model.type == "AppParameter")
+    /**
+     * Find by domain and key a AppParameter.
+     */
+    @RequestMapping(value = "/finder/{domain},{key}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AppParameter> findById(@PathVariable String domain, @PathVariable String key) throws URISyntaxException {
+        log.debug("Find by domain and key AppParameters : " + domain + ", " + key);
+        
+        AppParameter appParameter = appParameterRepository.findByDomainAndKey(domain, key);
+        
+        return new ResponseEntity<AppParameter>(appParameter, HttpStatus.OK);
     }
 #end
 }

@@ -20,9 +20,9 @@ $output.webapp("assets/tpl/partials", "sidebar.html")##
   </div>
 	<ul class="menu-links" ng-cloak>
     	<a menu-link href="#/dashboard" icon="md md-blur-on">Dashboard</a>
-    	<li menu-toggle path="/apps" name="Entities" icon="md md-camera">
+    	<li menu-toggle path="/apps" name="{{ 'MENU_ENTITIES' | translate }}" icon="md md-camera">
 #foreach ($entity in $project.entities.list)
-#if (!$entity.isManyToManyJoinEntity())
+#if (!$entity.isManyToManyJoinEntity() && !($entity.name == "AppParameter" || $entity.name == "AppTranslation"))
 			<a ui-sref="$entity.name.toLowerCase()" name="$entity.name">
         		<span id="todosCount" class="pull-right badge z-depth-0" ng-bind="todosCount"></span>
         		{{ '$entity.name.toUpperCase()_MENU' | translate }} 
@@ -30,7 +30,17 @@ $output.webapp("assets/tpl/partials", "sidebar.html")##
 #end
 #end
     	</li>
-    <li menu-toggle path="/ui-elements" name="Administration" icon="md md-photo">
+    <li menu-toggle path="/ui-elements" name="{{ 'MENU_CONFIGURATION' | translate }}" icon="md md-photo">
+#foreach ($entity in $project.entities.list)
+#if ($entity.name == "AppParameter" || $entity.name == "AppTranslation")
+			<a ui-sref="$entity.name.toLowerCase()" name="$entity.name">
+        		<span id="todosCount" class="pull-right badge z-depth-0" ng-bind="todosCount"></span>
+        		{{ '$entity.name.toUpperCase()_MENU' | translate }} 
+     		</a>
+#end
+#end    
+    </li>	
+    <li menu-toggle path="/ui-elements" name="{{ 'MENU_ADMINISTRATION' | translate }}" icon="md md-photo">
       <a menu-link ui-sref="logLevels">Logs Level</a>
       <a menu-link href="/myApp/swagger-ui.html">API</a>
     </li>

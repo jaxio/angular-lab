@@ -402,6 +402,16 @@ app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 		},
 		'update': { method:'PUT' },
 		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' }
+## dedicated method for system entities
+#if ($entity.model.type == "AppParameter")
+		,'getParameter': {method: 'GET',
+			url: 'api/appParameters/finder/:domain,:key',
+			transformResponse: function (data) {
+				data = angular.fromJson(data);
+				return data;
+			}
+		}
+#end		
 	});
 });
 

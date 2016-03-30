@@ -56,4 +56,12 @@ $output.require("java.math.BigDecimal")##
 	@Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(:title) OR LOWER(b.description) LIKE LOWER(:description) OR b.price = :price")
 	public List<Book> search(@Param("title") String title, @Param("description") String description, @Param("price") BigDecimal price);
 #end
+
+## dedicated method for system entities
+#if ($entity.model.type == "AppParameter")
+    /**
+     * Find by domain and key.
+     */
+    AppParameter findByDomainAndKey(String domain, String key);	
+#end
 }
