@@ -1,4 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
-script: mvn -Pdb,metadata,gen
+install:
+  - npm install -g bower
+script: 
+  - bower install
+  - mvn -Pdb,metadata,gen
