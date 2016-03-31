@@ -6,3 +6,5 @@ install:
 script: 
   - bower install
   - mvn -Pdb,metadata,gen
+notifications:
+  slack: jaxio:xwR8miiTTdrIAaNQvyJ0cb47
