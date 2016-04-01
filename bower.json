@@ -9,5 +9,8 @@
     "angular-translate": "~2.9.0",
     "ngInfiniteScroll": "1.0.0",
     "angular-translate-storage-cookie": "~2.9.0"
+  },
+  "resolutions": {
+    "angular": "1.5.3"
   }
 }
