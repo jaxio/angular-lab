@@ -149,6 +149,10 @@ CREATE TABLE BOOK_READER (
 	primary key (id)
 );
 
+-- sample view
+create view BuyableBook as select * from BOOK where price < 10
+
+
 INSERT INTO AUTHOR  VALUES (1, 'John Doe',null);
 INSERT INTO AUTHOR  VALUES (2, 'Camus albert',null);
 INSERT INTO AUTHOR  VALUES (3, 'Hugo victor',null);
@@ -219,3 +223,5 @@ INSERT INTO STORE  VALUES (3, 'Google', 'rue de Paris', '75016', 'PARIS');
 INSERT INTO BOOK_STORE  VALUES (1, 'serial_1', 1);
 INSERT INTO BOOK_STORE  VALUES (2, 'serial_2', 1);
 INSERT INTO BOOK_STORE  VALUES (3, 'serial_3', 1);
+
+INSEET INTO SCR (SCR_IDE, SCR_CAT) VALUES (-1, 'AVE');

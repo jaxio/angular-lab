@@ -1,30 +1,66 @@
-## Copyright 2015 JAXIO http://www.jaxio.com
-##
-## Licensed under the Apache License, Version 2.0 (the "License");
-## you may not use this file except in compliance with the License.
-## You may obtain a copy of the License at
-##
-##    http://www.apache.org/licenses/LICENSE-2.0
-##
-## Unless required by applicable law or agreed to in writing, software
-## distributed under the License is distributed on an "AS IS" BASIS,
-## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-## See the License for the specific language governing permissions and
-## limitations under the License.
-##
 $output.javaTest($Root,"ApplicationTests")##
 
 $output.require("org.junit.Test")##
 $output.require("org.junit.runner.RunWith")##
 $output.require("org.springframework.boot.test.SpringApplicationConfiguration")##
 $output.require("org.springframework.test.context.junit4.SpringJUnit4ClassRunner")##
+$output.require("org.springframework.boot.test.IntegrationTest")##
+$output.require("org.springframework.test.context.web.WebAppConfiguration")##
+
+$output.require("org.springframework.beans.factory.annotation.Autowired")##
+$output.require("org.springframework.beans.factory.annotation.Value")##
+
+$output.require("com.jaxio.demo.domain.Scr")##
+$output.require("com.jaxio.demo.repository.ScrRepository")##
+
+$output.require("org.junit.After")##
+$output.require("org.junit.Before")##
+$output.require("org.springframework.web.context.WebApplicationContext")##
+$output.require("org.springframework.test.web.servlet.MockMvc")##
+$output.require("org.springframework.test.web.servlet.setup.MockMvcBuilders")##
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@WebAppConfiguration
+@IntegrationTest("server.port:0")
 public class ApplicationTests {
+
+	@Value("${dollar}{local.server.port}")   
+    int port;
+	
+	@Autowired
+	ScrRepository repository;
+	
+	final String BASE_URL = "http://localhost:8080/myApp";
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
+
+    @After
+    public  void downUp(){
+    	this.mockMvc = null;
+    }
+    
+    @Test
+    public void testSayHelloWorld() throws Exception{
+
+    	Scr scr = repository.findOne(-1L);
+    	//System.out.println("Object AVANT: " + scr.toString());
+    	System.out.println("Object AVANT: " + scr.getScrTxt().length());
+    	
+    	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");
+    	scr = repository.save(scr);
+    	//System.out.println("Object APRES: " + scr.toString());
+    }
 
     @Test
     public void contextLoads() {
     }
-
 }

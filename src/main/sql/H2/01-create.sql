@@ -103,7 +103,17 @@ CREATE TABLE BOOK_STORE (
 	primary key (id)
 );
 
-
+CREATE TABLE SCR (	
+	SCR_IDE int not null, 
+	SCR_CAT VARCHAR(50), 
+	SCR_TXT CLOB, 
+	SCR_AVL int, 
+	SCR_NME VARCHAR(50), 
+	SCR_DESCR VARCHAR(200), 
+	SCR_CODE VARCHAR(50),
+	
+	primary key (SCR_IDE)
+);
 
 INSERT INTO AUTHOR  VALUES (1, 'John Doe',null);
 INSERT INTO AUTHOR  VALUES (2, 'Camus albert',null);
@@ -175,3 +185,6 @@ INSERT INTO STORE  VALUES (3, 'Google', 'rue de Paris', '75016', 'PARIS');
 INSERT INTO BOOK_STORE  VALUES (1, 'serial_1', 1);
 INSERT INTO BOOK_STORE  VALUES (2, 'serial_2', 1);
 INSERT INTO BOOK_STORE  VALUES (3, 'serial_3', 1);
+
+
+INSERT INTO SCR (SCR_IDE, SCR_CAT) VALUES (-1, 'TEST');
