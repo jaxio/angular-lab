@@ -2,7 +2,8 @@ $output.webapp("assets\js", "app2.js")##
 
 angular.module("app.constants", []).constant("APP", {
     version: "1.1.1"
-}), app.config(["${dollar}routeProvider", function(a) {
+}), 
+/*app.config(["${dollar}routeProvider", function(a) {
     a.when("/", {
         templateUrl: "assets/tpl/dashboardCrud.html"
     }).when("/:folder/:tpl", {
@@ -16,7 +17,8 @@ angular.module("app.constants", []).constant("APP", {
     }).otherwise({
         redirectTo: "/"
     })
-}]).config(["uiGmapGoogleMapApiProvider", function(a) {
+}])*/
+app.config(["uiGmapGoogleMapApiProvider", function(a) {
     a.configure({
         v: "3.17",
         libraries: "weather,geometry,visualization"
