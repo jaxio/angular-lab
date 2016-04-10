@@ -21,3 +21,8 @@ bower_components/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/192.168.1.128.tm2.epoch
+/.settings/
+/.tern-project
+/.project
+/pom.xml.h2

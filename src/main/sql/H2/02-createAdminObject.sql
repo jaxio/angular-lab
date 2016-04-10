@@ -1,7 +1,7 @@
 ---
 -- Example Schema
 --
-CREATE TABLE APPLI_TRANSLATIONS (
+CREATE TABLE APP_TRANSLATION (
     id                  int not null  IDENTITY,
     language				varchar(10) not null,
     key                varchar(1000) not null,
@@ -9,7 +9,7 @@ CREATE TABLE APPLI_TRANSLATIONS (
     primary key (id)
 );
 
-CREATE TABLE APPLI_PARAMETERS (
+CREATE TABLE APP_PARAMETER (
     id                  int not null  IDENTITY,
     domain				varchar(250) not null,
     key                varchar(1000) not null,
@@ -17,7 +17,7 @@ CREATE TABLE APPLI_PARAMETERS (
     primary key (id)
 );
 
-INSERT INTO APPLI_TRANSLATIONS  VALUES (1, 'fr_FR', 'TITLE', 'le titre en français.');
-INSERT INTO APPLI_TRANSLATIONS  VALUES (2, 'en', 'TITLE', 'le titre en anglais.');
+INSERT INTO APP_TRANSLATION  VALUES (1, 'fr_FR', 'TITLE', 'le titre en français.');
+INSERT INTO APP_TRANSLATION  VALUES (2, 'en', 'TITLE', 'le titre en anglais.');
 
-INSERT INTO APPLI_PARAMETERS VALUES (1, 'SETTINGS', 'defaultDateFormat', 'dd/MM/yyyy');
+INSERT INTO APP_PARAMETER VALUES (1, 'SETTINGS', 'defaultDateFormat', 'dd/MM/yyyy');

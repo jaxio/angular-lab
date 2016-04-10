@@ -27,25 +27,28 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 
 	## manage simple attribute		
 	#if (!$attribute.isInPk()  && !$attribute.isInFk())
+	
+			## is a mandatory field ?
+			#if ($attribute.isNotNullable() == true)
+				#set($requiredTag = "required")
+			#else
+				#set($requiredTag = "")
+			#end
+	
 			<div class="form-group">
-              <label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
+			#if ($requiredTag == "required")
+            	<label for="name" class="col-lg-2 control-label"><b>$attribute.varUp</b></label>
+            #else
+            	<label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
+            #end
               <div class="col-lg-10">
 		#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger" || $attribute.type == "String")
 			## we have to deal with LOB field
 			#if ($attribute.mappedType == "M_CLOB")
-				#if ($attribute.isNotNullable() == true)
-					#set($requiredTag = "required")
-				#else
-					#set($requiredTag = "")
-				#end
 				<textarea class="form-control vertical" rows="3" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag></textarea>
 			#else
 				## we have to deal with simple field       
-				#if ($attribute.isNotNullable() == true)
-					#set($requiredTag = "required")
-				#else
-					#set($requiredTag = "")
-				#end
+				
 				#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger")
 					<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag ng-pattern="/^\d{0,18}(\.\d{1,2})?$/">  
 				#else  
@@ -127,7 +130,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 ## this attribut is already on FK part of the page, so don't put it twice
 #else
           <div class="form-group">
-              <label for="id" class="col-lg-2 control-label">#if (!$attribute.isSimplePk())Id#end $attribute.varUp</label>
+              <label for="id" class="col-lg-2 control-label"><b>#if (!$attribute.isSimplePk())Id#end $attribute.varUp</b></label>
               <div class="col-lg-10">
                 <input type="text" class="form-control" id="${attribute.var}" #if ($attribute.getJpa().hasIdGeneratorByConvention()) ng-disabled="true" #end ng-model="item#if(!$attribute.isSimplePk()).id#end.${attribute.var}">
               </div>
