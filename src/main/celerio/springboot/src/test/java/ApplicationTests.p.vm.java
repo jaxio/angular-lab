@@ -52,12 +52,10 @@ public class ApplicationTests {
     public void testSayHelloWorld() throws Exception{
 
     	Scr scr = repository.findOne(-1L);
-    	//System.out.println("Object AVANT: " + scr.toString());
     	System.out.println("Object AVANT: " + scr.getScrTxt().length());
     	
     	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");
     	scr = repository.save(scr);
-    	//System.out.println("Object APRES: " + scr.toString());
     }
 
     @Test
