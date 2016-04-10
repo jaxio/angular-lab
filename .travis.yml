@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - oraclejdk8
+install:
+  - npm install -g bower
+script: 
+  - bower install
+  - mvn -Pdb,metadata,gen
+notifications:
+  slack: jaxio:xwR8miiTTdrIAaNQvyJ0cb47

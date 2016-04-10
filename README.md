@@ -1,5 +1,7 @@
 # Generate an Angular JS Web App
 
+[![Build Status](https://travis-ci.org/jaxio/angular-lab.svg?branch=master)](https://travis-ci.org/jaxio/angular-lab)
+
 >>
 >> NOTE: This is still a work in progress, we are looking for feedbacks from Angular JS experts.
 >> 
