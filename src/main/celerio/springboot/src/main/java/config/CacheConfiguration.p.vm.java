@@ -1,6 +1,5 @@
 $output.java("${configuration.rootPackage}.config", "CacheConfiguration")##
 
-
 $output.require("org.slf4j.Logger")##
 $output.require("org.slf4j.LoggerFactory")##
 $output.require("org.springframework.cache.annotation.EnableCaching")##

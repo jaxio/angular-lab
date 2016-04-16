@@ -64,4 +64,11 @@ spring:
 server:
     port: @application.port@
     contextPath: @application.contextpath@
+
+
+# properties that belongs to the application itself	
+application:
+    async:
+        corePoolSize: 1
+
     
