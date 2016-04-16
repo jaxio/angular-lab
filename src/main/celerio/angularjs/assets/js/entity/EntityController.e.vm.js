@@ -210,8 +210,8 @@ scope.loadOneItem = function(id) {
 	});
 };
 
-/* fill the result grid by default */
-scope.refresh();
+/* fill the result grid by default (first page only) */
+scope.refreshByPage(0, scope.totalElementsPerPage);
 
 /** defines the CRUD aside */
 var crudAside = c({

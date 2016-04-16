@@ -42,7 +42,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
 
 
     <div class="table-responsive well no-padding white no-margin">
-      <h3 class="table-title">{{data.length}} {{settings.plural}} available</h3>
+      <h3 class="table-title">{{data.length}} of {{pagination.totalElements}} {{settings.plural}} available</h3>
 
       <table class="table table-full m-b-60" id="table-area-1" fsm-big-data="data of data take 30">
         <thead>
@@ -111,9 +111,18 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
           </tr>
         </tbody>
       </table>
+      
+      <div class="p-20">
+      	<li class="pager">
+			<button type="button" ng-click="first()" ng-disabled="pagination.first" class="btn btn-default pull-left">|&laquo; First</button>      
+      		<button type="button" ng-click="prev()" ng-disabled="pagination.first" class="btn btn-default pull-left">&laquo; Previous</button>
+      		<button type="button" ng-click="last()" ng-disabled="pagination.last" class="btn btn-default pull-right">Last &raquo;|</button>
+      		<button type="button" ng-click="next()" ng-disabled="pagination.last" class="btn btn-default pull-right">Next &raquo;</button>
+      	</li>
+      </div>
     </div>
 
-
+  <br><br><br><br>
   <div class="footer-buttons">
     <div class="btn btn-primary btn-round btn-lg m-r-10 btn-footer" ng-show="(data|filter:{selected: true}).length" ng-click="remove()"  data-title="Remove {{(data|filter:{selected: true}).length}} item(s)" bs-tooltip><i class="md md-delete"></i></div>
     <div class="btn btn-default btn-round btn-lg m-r-10 btn-footer" scroll-to="top" ng-hide="scroll<100" data-title="{{ 'SCROLL_TO_TOP' | translate }}" bs-tooltip><i class="md md-arrow-drop-up"></i></div>
