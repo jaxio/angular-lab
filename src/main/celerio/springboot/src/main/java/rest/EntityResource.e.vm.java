@@ -102,15 +102,15 @@ public class $output.currentClass{
 
     /**
      * Find all $entity.model.type.
+     * WARNING: if your table has got a lot of records, you will face OutOfMemory error.
      */
     @RequestMapping(value = "/",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<$entity.model.type>> findAll(Pageable pageable) throws URISyntaxException {
-        log.debug("Find all $entity.model.varsUp, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
-        Page<${entity.model.type}> page = ${entity.repository.var}.findAll(pageable);
-        log.debug("There are " + page.getTotalElements() + " $entity.model.vars.");
-        return new ResponseEntity<>(page.getContent(), new HttpHeaders(), HttpStatus.OK);
+    public ResponseEntity<List<$entity.model.type>> findAll() throws URISyntaxException {
+        log.debug("Find all $entity.model.varsUp");
+        List<${entity.model.type}> list = ${entity.repository.var}.findAll();
+        return new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
     }
     
     /**

@@ -1,31 +1,21 @@
-## Copyright 2015 JAXIO http://www.jaxio.com
-##
-## Licensed under the Apache License, Version 2.0 (the "License");
-## you may not use this file except in compliance with the License.
-## You may obtain a copy of the License at
-##
-##    http://www.apache.org/licenses/LICENSE-2.0
-##
-## Unless required by applicable law or agreed to in writing, software
-## distributed under the License is distributed on an "AS IS" BASIS,
-## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-## See the License for the specific language governing permissions and
-## limitations under the License.
-##
 $output.java("${configuration.rootPackage}.config", "ElasticSearchConfiguration")##
-import java.io.IOException;
 
-import org.elasticsearch.client.Client;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.EntityMapper;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+$output.require("java.io.IOException")##
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+$output.require("org.elasticsearch.client.Client")##
+$output.require("org.springframework.boot.autoconfigure.AutoConfigureAfter")##
+$output.require("org.springframework.context.annotation.Bean")##
+$output.require("org.springframework.context.annotation.Configuration")##
+$output.require("org.springframework.data.elasticsearch.core.ElasticsearchTemplate")##
+$output.require("org.springframework.data.elasticsearch.core.EntityMapper")##
+$output.require("org.springframework.http.converter.json.Jackson2ObjectMapperBuilder")##
 
+$output.require("com.fasterxml.jackson.databind.DeserializationFeature")##
+$output.require("com.fasterxml.jackson.databind.ObjectMapper")##
+
+/**
+ * Configures ElasticSearch engine.
+ */
 @Configuration
 @AutoConfigureAfter(value = { JacksonConfiguration.class })
 public class ElasticSearchConfiguration {
