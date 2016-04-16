@@ -43,6 +43,7 @@ $output.require("org.springframework.data.domain.Pageable")##
 $output.require("org.springframework.data.domain.Page")##
 $output.require("org.springframework.http.HttpHeaders")##
 $output.require("org.springframework.http.HttpStatus")##
+$output.require("org.springframework.scheduling.annotation.Async")##
 $output.require("org.springframework.web.bind.annotation.RequestMapping")##
 $output.require("org.springframework.web.bind.annotation.RequestMethod")##
 $output.require("org.springframework.web.bind.annotation.PathVariable")##
@@ -248,10 +249,11 @@ public class $output.currentClass{
     @RequestMapping(value = "/indexAll",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
+	@Async
     public void indexAll${entity.model.varsUp}() {
     	log.debug("REST request to index all $entity.model.varsUp");
-#if (($entity.hasSimplePk()))    	
-    	${entity.model.var}Repository.findAll().forEach(p -> ${entity.model.var}SearchRepository.index(p));
+#if (($entity.hasSimplePk()))
+    	${entity.model.var}Repository.findAll().forEach(p -> {log.debug("indexing");${entity.model.var}SearchRepository.index(p);});
 #end    	
     }
     

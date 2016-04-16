@@ -17,6 +17,8 @@ $output.require("javax.inject.Inject")##
 
 /**
  * Configures asynchronous execution. 
+ * 
+ * Annotating a method of a bean with @Async will make it execute in a separate thread i.e. the caller will not wait for the completion of the called method.
  *
  */
 @Configuration
