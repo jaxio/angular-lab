@@ -52,24 +52,83 @@ scope.settings = {
 		cmd: "Add"
 };
 
+// pagination variables
+scope.pagination = {};
+scope.totalElementsPerPage = 20;
+scope.busy = false;
+
 // checkbox in the grid header
 scope.selectAll = false;
 
 // data to fill the grid
 scope.data = [];
 
-/** Refresh the result grid via a REST call */
+/** Refresh the result grid via a REST call, gets only the first page */
 scope.refresh = function () {
 	log.info("call method refresh inside ${entity.model.type}Controller");
-	${entity.model.var}RestService.query('', function(result) {
+	${entity.model.var}RestService.query({page: 0, size: scope.totalElementsPerPage}, function(result) {
 		log.info("receiving info from server side");
 		
 		log.info("result: " + result);
-		scope.data = result;
+		scope.data = result.content;
 		log.info("data post refresh:" + scope.data.length);
 	});
 	
 	scope.selectAll = false;
+};
+
+/** Gets data page per page */
+scope.refreshByPage = function (page, size, addMode) {
+	log.info("call method refreshByPage inside ${entity.model.type}Controller");
+	${entity.model.var}RestService.query({page: page, size: size}, function(result) {
+		log.info("receiving info from server side in page mode");
+		
+		log.info("result: " + result);
+		if (addMode) {
+			for (var i = 0; i < result.content.length; i++) {
+				scope.data.push(result.content[i]);
+			}
+		} else {
+			scope.data = result.content;
+		}
+		
+		// fill pagination variables
+		scope.pagination.first = result.first;
+		scope.pagination.last = result.last;
+		scope.pagination.totalElements = result.totalElements;
+		scope.pagination.totalPages = result.totalPages;
+		scope.pagination.number = result.number;
+		
+		log.info("data post refresh:" + scope.data.length);
+		log.info("page number: " + scope.pagination.number);
+		scope.busy = false;
+	});
+	
+	scope.selectAll = false;
+};
+
+/** Gets first page */
+scope.first = function () {
+	log.info("call method first inside ${entity.model.type}Controller for page: 0");
+	scope.refreshByPage(0, scope.totalElementsPerPage, false);		
+}; 
+
+/** Gets previous page */
+scope.prev = function () {
+	log.info("call method prev inside ${entity.model.type}Controller for page: " + (scope.pagination.number - 1));
+	scope.refreshByPage(scope.pagination.number - 1, scope.totalElementsPerPage, false);		
+}; 
+
+/** Gets next page */
+scope.next = function () {
+	log.info("call method next inside ${entity.model.type}Controller for page: " + (scope.pagination.number + 1));
+	scope.refreshByPage(scope.pagination.number + 1, scope.totalElementsPerPage, false);		
+}; 
+
+/** Gets last page */
+scope.last = function () {
+	log.info("call method last inside ${entity.model.type}Controller for page: " + (scope.pagination.totalPages - 1));
+	scope.refreshByPage(scope.pagination.totalPages - 1, scope.totalElementsPerPage, false);		
 };
 
 #foreach ($attribute in $entity.nonCpkAttributes.list)
@@ -390,8 +449,9 @@ scope.${dollar}on("${dollar}destroy", function() {
 #generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
 /** main REST client for managing (4 CRUD calls) ${entity.model.type} entity */
 app.factory('${entity.model.type}RestService', function (${dollar}resource) {
-	return ${dollar}resource('api/${entity.model.vars}/?page=0&size=1000', {}, {
-		'query': { method: 'GET', isArray: true},
+	return ${dollar}resource('api/${entity.model.vars}/bypage/?page=:page0&size=:size', {}, {
+			/* sorting sample: &sort=aColumnName,desc&sort=anotherColumnName,asc */
+		'query': { method: 'GET', isArray: false},
 		'get': {
 			method: 'GET',
 			url: 'api/${entity.model.vars}/$str6',
@@ -400,7 +460,7 @@ app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 				return data;
 			}
 		},
-		'update': { method:'PUT' },
+		'update': { method:'PUT' , url: 'api/${entity.model.vars}/$str6'},
 		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' }
 ## dedicated method for system entities
 #if ($entity.model.type == "AppParameter")

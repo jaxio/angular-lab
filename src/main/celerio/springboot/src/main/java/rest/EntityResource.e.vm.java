@@ -112,6 +112,19 @@ public class $output.currentClass{
         log.debug("There are " + page.getTotalElements() + " $entity.model.vars.");
         return new ResponseEntity<>(page.getContent(), new HttpHeaders(), HttpStatus.OK);
     }
+    
+    /**
+     * Find all $entity.model.type by page.
+     */
+    @RequestMapping(value = "/bypage",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Page<$entity.model.type> findAllByPage(Pageable pageable) throws URISyntaxException {
+        log.debug("Find all by page $entity.model.varsUp, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
+        Page<${entity.model.type}> page = ${entity.repository.var}.findAll(pageable);
+        log.debug("There are " + page.getTotalElements() + " $entity.model.vars.");
+        return page;
+    }
 
 #set ($str1 = "")
 #set ($str2 = "")
