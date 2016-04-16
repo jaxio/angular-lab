@@ -142,7 +142,7 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 #generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('view${entity.name}', {
-			url: "/${entity.name.toLowerCase()}/${str1}",
+			url: "/${entity.name.toLowerCase()}/view/${str1}",
 	    	templateUrl: "assets/tpl/apps/${entity.model.var}/${entity.model.var}Edit.html",
 			controller: "${entity.name}EditController",
 			resolve: {
