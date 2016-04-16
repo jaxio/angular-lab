@@ -20,9 +20,9 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="clear()" data-title="{{ 'CLEAR_GRID' | translate }}" bs-tooltip><span class="md md-clear"></span></button>
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="index()" data-title="{{ 'INDEX_ITEMS' | translate }}" bs-tooltip><span class="md md-settings"></span></button>
       
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ui-sref="config${entity.name}()" data-title="{{ 'CONFIG_ENTITY' | translate }}" bs-tooltip><span class="md md-settings"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ui-sref="config${entity.name}()" data-title="{{ 'CONFIG_ENTITY' | translate }}" bs-tooltip><span class="md md-assignment"></span></button>
       
-      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-csv="getCSVData()" field-separator=";" lazy-load="true" charset="utf-8" filename="${entity.model.var}Data.csv" csv-label="true" data-title="export the grid"><span class="md md-download"></span></button>
+      <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-csv="getCSVData()" field-separator=";" lazy-load="true" charset="utf-8" filename="${entity.model.var}Data.csv" csv-label="true" data-title="export the grid"><span class="md md-get-app"></span></button>
       
       <button type="button" class="btn btn-link btn-round-sm theme-secondary-text" ng-click="checkBoxValue()" data-title="test button" bs-tooltip><span class="md md-info"></span></button>
     </div>

@@ -72,7 +72,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 	
             <label class="col-lg-2 control-label">${oneToOne.to.type}</label>
             <div class="col-lg-10">     	
-            <ui-select ng-model="item.$oneToOne.to.var" theme="select2" title="Choose an $oneToOne.to.var" search-enabled="false">
+            <ui-select ng-model="item.$oneToOne.to.var" theme="select2" title="Choose an $oneToOne.to.var" search-enabled="true">
 #foreach ($toAttribute in $oneToOne.getToEntity().getAttributes().list)  
 	 #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())          
                 <ui-select-match placeholder="Choose an $oneToOne.to.var">{{${dollar}select.selected.$toAttribute.name}}</ui-select-match>
@@ -101,7 +101,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 	
             <label class="col-lg-2 control-label"><a ui-sref="edit${manyToOne.getToEntity().model.type}({id:1})">${manyToOne.to.type}</a></label>
             <div class="col-lg-10">     	
-            <ui-select ng-model="item.$manyToOne.to.var" theme="select2" title="Choose an $manyToOne.to.var" search-enabled="false">
+            <ui-select ng-model="item.$manyToOne.to.var" theme="select2" title="Choose an $manyToOne.to.var" search-enabled="true">
 #foreach ($toAttribute in $manyToOne.getToEntity().getAttributes().list)  
 	 #if (!$toAttribute.isInPk()  && !$toAttribute.isInFk())          
                 <ui-select-match placeholder="Choose an $manyToOne.to.var">{{${dollar}select.selected.$toAttribute.name}}</ui-select-match>
