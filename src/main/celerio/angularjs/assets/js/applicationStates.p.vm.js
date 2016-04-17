@@ -10,8 +10,21 @@ $output.webapp("assets\js", "applicationStates.js")##
 ## str6: :keyPart1,:keyPart2
 ## str7: {{item.id.keyPart1}}:{{item.id.keyPart2}}
 ## str8: {keyPart1: item.id.keyPart1, keyPart2: item.id.keyPart2}
+## str9: { "column1": true, "column2": true, ... }
 #########################################################################################
-#macro(generateSimpleOrCompositeKeyForURL $str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $list)
+##
+## Be careful: this method is call several times; be sure to change all calls when you add a parameter
+## calls: 
+##			2 inside this file
+##			1 in EntityController.e.vm.js
+##			1 in EntityEditController.e.vm.js
+##			1 in EntityConfigController.e.vm.js
+##			1 in entity.e.vm.html
+##			1 in CompositePk.cpk.vm.java
+##			1 in EntityResource.e.vm.java
+##	
+##
+#macro(generateSimpleOrCompositeKeyForURL $str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $list)
 #set ($compositeCall = false) 
 	#foreach ($attribute in $list)
 		#if ($attribute.isInCpk() == true)
@@ -36,6 +49,12 @@ $output.webapp("assets\js", "applicationStates.js")##
 				#set ($str8 = "$str8, $attribute.name: item.id.$attribute.name")
 			#end
 		#end
+		
+		#if ($str9 == "") 
+			#set ($str9 = "{ \"$attribute.name\": true")
+		#else
+			#set ($str9 = "$str9, \"$attribute.name\": true")
+		#end
 	#end
 	
 	#if ($str1 == "")
@@ -48,6 +67,8 @@ $output.webapp("assets\js", "applicationStates.js")##
 		#set ($str2 = "$str2}")
 		#set ($str8 = "$str8}")
 	#end
+	## close bracket
+	#set ($str9 = "$str9}")
 #end
 
 
@@ -110,7 +131,8 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 #set ($str6 = "")
 #set ($str7 = "")
 #set ($str8 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
+#set ($str9 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('edit${entity.name}', {
 			url: "/${entity.name.toLowerCase()}/${str1}",
@@ -139,7 +161,8 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 #set ($str6 = "")
 #set ($str7 = "")
 #set ($str8 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
+#set ($str9 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('view${entity.name}', {
 			url: "/${entity.name.toLowerCase()}/view/${str1}",
@@ -182,7 +205,7 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 			controller: "${entity.name}ConfigController",
 			resolve: {
 				config : ['${dollar}stateParams', 'AppParameterRestService', '${dollar}log', function(${dollar}stateParams, appParameterRestService, log) {
-					return appParameterRestService.getParameter({domain: 'TEST', key: 'test'}, function success(result) {}, function failure(result){
+					return appParameterRestService.getParameter({domain: 'SCREEN_CONFIG', key: '${entity.name}'}, function success(result) {}, function failure(result){
 						log.info("something goes wrong !");
 						}).${dollar}promise;
                     }]

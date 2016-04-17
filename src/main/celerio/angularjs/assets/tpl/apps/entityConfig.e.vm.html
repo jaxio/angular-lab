@@ -19,7 +19,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Config
 
     <div class="table-responsive well no-padding white no-margin">
       <h3 class="table-title"></h3>
-
+<form>
       <table class="table table-full m-b-60" id="table-area-1" fsm-big-data="data of data take 30">
         <thead>
         <tr fsm-sticky-header scroll-body="'${pound}table-area-1'" scroll-stop="64">
@@ -66,13 +66,20 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Config
           	#else
           		<td>&nbsp;</td>
           	#end
-            <td><input type="checkbox" class="relative" ng-model="config.${attribute.var}"/></td>
-            <td><input type="checkbox" class="relative" ng-model="config.${attribute.var}"/></td>
+            <td><input type="checkbox" class="relative" ng-model="configValue.${attribute.var}"/></td>
+            <td><input type="checkbox" class="relative" ng-model="configValue.${attribute.var}"/></td>
           </tr>
 		  
 #end     
         </tbody>
       </table>
+      
+      <div class="form-group">
+      	<div class="col-lg-20 col-lg-offset-2">
+        	<button type="submit" class="btn btn-primary" ng-click="saveConfig(configValue)">Save</button>
+        </div>
+      </div>
+      </form>      
     </div>
 
 <div class="footer-buttons">

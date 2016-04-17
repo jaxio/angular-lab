@@ -135,7 +135,8 @@ public class $output.currentClass{
 #set ($str6 = "")
 #set ($str7 = "")
 #set ($str8 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
+#set ($str9 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
 #if (($entity.hasSimplePk()))
     /**
      * Find by id $entity.model.type (for simple key).

@@ -446,7 +446,8 @@ scope.${dollar}on("${dollar}destroy", function() {
 #set ($str6 = "")
 #set ($str7 = "")
 #set ($str8 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $entity.attributes.list)
+#set ($str9 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
 /** main REST client for managing (4 CRUD calls) ${entity.model.type} entity */
 app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 	return ${dollar}resource('api/${entity.model.vars}/bypage/?page=:page&size=:size', {}, {
