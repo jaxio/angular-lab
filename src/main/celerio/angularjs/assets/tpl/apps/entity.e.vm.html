@@ -57,7 +57,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
 #end			
 #foreach ($attribute in $entity.attributes.list)
 	#if (!$attribute.isInFk() && !$attribute.isInCpk() && !$attribute.isInPk())
-		  <th fsm-sort="$attribute.var">$attribute.varUp</th>
+		  <th fsm-sort="$attribute.var" ng-show="configValue.${attribute.var}">$attribute.varUp</th>
 	#end
 #end
 
@@ -84,15 +84,15 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
 #foreach ($attribute in $entity.nonCpkAttributes.list)
 	#if (!$attribute.isInFk() && !$attribute.isInCpk() && !$attribute.isInPk())
 		#if ($attribute.type == "Date")
-			<td>{{item.${attribute.var} | date:"dd/MM/yyyy"}}</td>
+			<td  ng-show="configValue.${attribute.var}">{{item.${attribute.var} | date:"dd/MM/yyyy"}}</td>
 		#elseif ($attribute.mappedType == "M_CLOB")
-			<td><div ng-init="limit = 50; moreShown = false; lessShown = false;">
+			<td ng-show="configValue.${attribute.var}"><div ng-init="limit = 50; moreShown = false; lessShown = false;">
     			{{item.${attribute.var} | limitTo: limit}}
     			<a ng-show="item.${attribute.var}.length > limit" href ng-click="limit=item.${attribute.var}.length; moreShown = true; lessShown = true;" data-title="{{ 'MORE_TOOLTIP' | translate }}" bs-tooltip>...  <b>{{ 'MORE' | translate }}</b></a>    			
     			<a ng-show="lessShown == true" href ng-click="limit=50; moreShown = false; lessShown = false">  <b>{{ 'LESS' | translate }}</b></a>
 				</div></td>			
 		#else
-		    <td>{{item.${attribute.var}}}</td>
+		    <td ng-show="configValue.${attribute.var}">{{item.${attribute.var}}}</td>
 		#end
 	#end	    
 #end

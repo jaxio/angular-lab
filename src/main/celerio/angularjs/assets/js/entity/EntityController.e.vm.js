@@ -47,7 +47,8 @@ app.controller("${entity.model.type}Controller", ["${dollar}scope", "${dollar}wi
 		alertService, timeoutService, config) {
 
 log.info("inside ${entity.model.type}Controller, config.value: " + config.value);
-			
+scope.configValue = angular.fromJson(config.value);
+		
 scope.settings = {
 		singular: "Item",
 		plural: "Items",
