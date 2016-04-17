@@ -15,10 +15,9 @@ $output.webapp("assets\js", "applicationStates.js")##
 ##
 ## Be careful: this method is call several times; be sure to change all calls when you add a parameter
 ## calls: 
-##			2 inside this file
+##			3 inside this file
 ##			1 in EntityController.e.vm.js
 ##			1 in EntityEditController.e.vm.js
-##			1 in EntityConfigController.e.vm.js
 ##			1 in entity.e.vm.html
 ##			1 in CompositePk.cpk.vm.java
 ##			1 in EntityResource.e.vm.java
@@ -113,11 +112,33 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
     	
 ## main state for each entity    	
 #foreach ($entity in $project.entities.list)
+#set ($str1 = "")
+#set ($str2 = "")
+#set ($str3 = "")
+#set ($str4 = "")
+#set ($str5 = "")
+#set ($str6 = "")
+#set ($str7 = "")
+#set ($str8 = "")
+#set ($str9 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('$entity.name.toLowerCase()', {
 	    	url: "/$entity.name.toLowerCase()",
 	    	templateUrl: "assets/tpl/apps/${entity.model.var}/${entity.model.var}.html",
-			controller: "${entity.name}Controller" 
+			controller: "${entity.name}Controller",
+			resolve: {
+				config : ['${dollar}stateParams', 'AppParameterRestService', '${dollar}log', function(${dollar}stateParams, appParameterRestService, log) {
+					return appParameterRestService.getParameter({domain: 'SCREEN_CONFIG', key: '${entity.name}'}).${dollar}promise.then (function (result) {
+					 	if (!result.value) {
+                   			// no data has been found inside the dabatase, we need to create a fresh one
+							return appParameterRestService.create({"domain": "SCREEN_CONFIG", "key": "${entity.name}", "value": "$str9"});
+						} else {
+							return result;
+						}
+						});
+                    }]
+				} 
 	});		  
 #end    	
 
@@ -205,9 +226,14 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 			controller: "${entity.name}ConfigController",
 			resolve: {
 				config : ['${dollar}stateParams', 'AppParameterRestService', '${dollar}log', function(${dollar}stateParams, appParameterRestService, log) {
-					return appParameterRestService.getParameter({domain: 'SCREEN_CONFIG', key: '${entity.name}'}, function success(result) {}, function failure(result){
-						log.info("something goes wrong !");
-						}).${dollar}promise;
+					return appParameterRestService.getParameter({domain: 'SCREEN_CONFIG', key: '${entity.name}'}).${dollar}promise.then (function (result) {
+					 	if (!result.value) {
+                   			// no data has been found inside the dabatase, we need to create a fresh one
+							return appParameterRestService.create({"domain": "SCREEN_CONFIG", "key": "${entity.name}", "value": "$str9"});
+						} else {
+							return result;
+						}
+						});
                     }]
 				}
 	});

@@ -1,26 +1,11 @@
 $output.webapp("assets\js\entity", "${entity.model.var}ConfigController.js")##
 
-#set ($str1 = "")
-#set ($str2 = "")
-#set ($str3 = "")
-#set ($str4 = "")
-#set ($str5 = "")
-#set ($str6 = "")
-#set ($str7 = "")
-#set ($str8 = "")
-#set ($str9 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
-
 app.controller("${entity.model.type}ConfigController", ["${dollar}scope", "${dollar}window", "${dollar}aside", 
 "${dollar}log", "AppParameterRestService", 
 		"${dollar}alert", "${dollar}timeout", "config", function(scope, window, aside, log, 
 		appParameterRestService, 
 		alertService, timeoutService, config) {
 
-	if (!config.value) {
-		// config is empty, create one without id
-		config = {"domain": "SCREEN_CONFIG", "key": "${entity.name}", "value": "$str9"};
-	}
 	log.info("inside ${entity.model.type}ConfigController, config.value: " + config.value);
 	scope.configValue = angular.fromJson(config.value);
 

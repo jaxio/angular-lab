@@ -32,7 +32,7 @@ app.controller("${entity.model.type}Controller", ["${dollar}scope", "${dollar}wi
 		#end 
 	#end
 #end		
-		"${dollar}alert", "${dollar}timeout", function(scope, window, c, d, log, 
+		"${dollar}alert", "${dollar}timeout", "config", function(scope, window, c, d, log, 
 		${entity.model.var}RestService, ${entity.model.var}RestSearchService, ${entity.model.var}RestIndexService, 
 		${entity.model.var}RestMassDeleteService, 
 #foreach ($attribute in $entity.nonCpkAttributes.list)
@@ -44,8 +44,10 @@ app.controller("${entity.model.type}Controller", ["${dollar}scope", "${dollar}wi
 		#end 
 	#end
 #end				 
-		alertService, timeoutService) {
-	
+		alertService, timeoutService, config) {
+
+log.info("inside ${entity.model.type}Controller, config.value: " + config.value);
+			
 scope.settings = {
 		singular: "Item",
 		plural: "Items",
@@ -461,7 +463,8 @@ app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 				return data;
 			}
 		},
-		'update': { method:'PUT' , url: 'api/${entity.model.vars}/$str6'},
+		'create': { method:'POST', url: 'api/${entity.model.vars}/$str6'},
+		'update': { method:'PUT', url: 'api/${entity.model.vars}/$str6'},
 		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' }
 ## dedicated method for system entities
 #if ($entity.model.type == "AppParameter")
