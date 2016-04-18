@@ -50,14 +50,14 @@ app.controller("${entity.model.type}EditController", ["${dollar}scope", "${dolla
 // fill $attribute.getEntityIPointTo().name combo with data from server side
 ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.getEntityIPointTo().name.substring(1).toLowerCase()}RestService.query({query: '*'}, function success(result){
 	log.info("receiving ${attribute.getEntityIPointTo().name} from server side");
-	scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result;
+	scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result.content;
 	log.info("${attribute.getEntityIPointTo().name} post refresh: " + result.length);
 });
 		#elseif ($attribute.getXToOneRelation().isOneToOne())
 	// fill $attribute.getEntityIPointTo().name combo with data from server side
 	${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.getEntityIPointTo().name.substring(1).toLowerCase()}RestService.query({query: '*'}, function success(result){
 		log.info("receiving ${attribute.getEntityIPointTo().name} from server side");
-		scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result;
+		scope.$attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()$attribute.getEntityIPointTo().name.substring(1)s = result.content;
 		log.info("${attribute.getEntityIPointTo().name} post refresh: " + result.length);
 	});
 		#else
