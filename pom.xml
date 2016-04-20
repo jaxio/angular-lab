@@ -158,10 +158,10 @@
             <version>${jackson.version}</version>
         </dependency>
         
-        <dependency>
+        <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -200,23 +200,39 @@
         </dependency>
         
         <!-- Support for JTA distributed transactions via Atomikos. -->
-        <dependency>
+        <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jta-atomikos</artifactId>
-        </dependency>
+        </dependency-->
         
     	<!-- dependency>
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter-actuator</artifactId>
     	</dependency-->
 
+	<!-- entity cache, part 1-->
+	<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <!-- exclusions>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache-core</artifactId>
+                </exclusion>
+            </exclusions-->
+        </dependency>
+        <!-- entity cache, part 2 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        
         <!-- ~~~~ -->
         <!-- TEST -->
         <!-- ~~~~ -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -266,6 +282,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                    
+                    <arguments>
+                        <argument>--spring.profiles.active=dev</argument>
+                    </arguments>
+                </configuration>                
             </plugin>
 
             <plugin>
