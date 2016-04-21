@@ -66,6 +66,7 @@ public class ApplicationTest {
     	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");
     	scr = repository.save(scr);
     	//System.out.println("Object APRES: " + scr.toString());
+    	// end
     }
 
     @Test
