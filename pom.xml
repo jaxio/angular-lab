@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jaxio</groupId>
-    <artifactId>angular-lab</artifactId>
+    <artifactId>myApp</artifactId>
     <packaging>war</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>demo</name>
@@ -29,7 +29,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
 
-
         <hibernate.version>5.0.2.Final</hibernate.version>
 
         <!-- ~~~~~~~~ -->
@@ -43,45 +42,24 @@
 
         <!-- **** CHANGE THE PROPERTIES BELOW TO USE YOUR OWN DATABASE **** -->
         <!-- **** DO NOT USE A PRODUCTION DATABASE **** -->
-        <database.type>H2</database.type><!-- see 'db' profile, it is used to find the sql script -->
-        
-        <!--
         <database.type>ORACLE</database.type>
-		-->
 
-        <!-- h2 jdbc driver (same as wildfly) -->
-        <jdbc.groupId>com.h2database</jdbc.groupId>
-        <jdbc.artifactId>h2</jdbc.artifactId>
-        <jdbc.version>1.4.187</jdbc.version>
-        
         <!-- ORACLE jdbc driver -->
-        <!-- 
         <jdbc.groupId>oracle</jdbc.groupId>
         <jdbc.artifactId>ojdbc</jdbc.artifactId>
         <jdbc.version>7</jdbc.version>
- -->
  
-        <!-- h2 jdbc settings -->
-        <jdbc.driver>org.h2.Driver</jdbc.driver>
-        <jdbc.url>jdbc:h2:${project.build.directory}/db/angular-lab;MVCC=TRUE;FILE_LOCK=NO</jdbc.url><!-- for runtime -->
-        <jdbc.user>${database.user}</jdbc.user>
-        <jdbc.password>${database.password}</jdbc.password>
-        <jdbc.schema></jdbc.schema>
-        <jdbc.catalog></jdbc.catalog>
-        <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
-        <sql-maven-plugin.delimiter>;</sql-maven-plugin.delimiter>
-        
         <!-- ORACLE jdbc settings -->
-        <!-- 
         <jdbc.driver>oracle.jdbc.driver.OracleDriver</jdbc.driver>
         <jdbc.url>jdbc:oracle:thin:@localhost:1521:XE</jdbc.url>
-        <jdbc.user>HR</jdbc.user>
-        <jdbc.password>HR</jdbc.password>
-        <jdbc.schema></jdbc.schema>
+        <jdbc.user>demo1</jdbc.user>
+        <jdbc.password>demo1</jdbc.password>
+        <jdbc.schema>DEMO1</jdbc.schema>
         <jdbc.catalog></jdbc.catalog>
+        <jdbc.reverseViews>false</jdbc.reverseViews>
+        
         <hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
         <sql-maven-plugin.delimiter>;</sql-maven-plugin.delimiter>
- 		-->
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Version dependencies when used in multiple dependencies -->
@@ -125,6 +103,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        
+        <!--dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency-->
+        
+		<!--dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency-->
+  
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -158,10 +147,10 @@
             <version>${jackson.version}</version>
         </dependency>
         
-        <dependency>
+        <!-- dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -200,23 +189,39 @@
         </dependency>
         
         <!-- Support for JTA distributed transactions via Atomikos. -->
-        <dependency>
+        <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jta-atomikos</artifactId>
-        </dependency>
+        </dependency-->
         
     	<!-- dependency>
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter-actuator</artifactId>
     	</dependency-->
 
+		<!-- entity cache, part 1-->
+		<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <!-- exclusions>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache-core</artifactId>
+                </exclusion>
+            </exclusions-->
+        </dependency>
+        <!-- entity cache, part 2 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        
         <!-- ~~~~ -->
         <!-- TEST -->
         <!-- ~~~~ -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -266,6 +271,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                    
+                    <arguments>
+                        <argument>--spring.profiles.active=dev</argument>
+                    </arguments>
+                </configuration>
             </plugin>
 
             <plugin>
