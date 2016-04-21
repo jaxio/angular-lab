@@ -5,7 +5,7 @@ install:
   - npm install -g bower
 script: 
   - bower install
-  - mvn -Pdb,metadata,gen
+  - mvn -Pdb,metadata,gen,test
 notifications:
   slack: jaxio:xwR8miiTTdrIAaNQvyJ0cb47
 after_success:
