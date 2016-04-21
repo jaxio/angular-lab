@@ -39,6 +39,7 @@ public class ApplicationTest {
 	@Autowired
 	ScrRepository repository;
 	
+	// FIXME
 	final String BASE_URL = "http://localhost:8080/myApp";
 
     @Autowired
