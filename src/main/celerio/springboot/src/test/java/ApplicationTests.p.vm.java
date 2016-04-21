@@ -51,7 +51,7 @@ public class ApplicationTests {
     @Test
     public void testSayHelloWorld() throws Exception{
 
-    	Scr scr = repository.findOne(-1L);
+    	Scr scr = repository.findOne(-1);
     	System.out.println("Object AVANT: " + scr.getScrTxt().length());
     	
     	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");

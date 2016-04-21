@@ -199,8 +199,8 @@
         	<artifactId>spring-boot-starter-actuator</artifactId>
     	</dependency-->
 
-		<!-- entity cache, part 1-->
-		<dependency>
+	    <!-- entity cache, part 1-->
+	    <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
             <!-- exclusions>

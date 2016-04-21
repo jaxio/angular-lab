@@ -39,6 +39,7 @@ public class ApplicationTest {
 	@Autowired
 	ScrRepository repository;
 	
+	// FIXME
 	final String BASE_URL = "http://localhost:8080/myApp";
 
     @Autowired
@@ -59,6 +60,7 @@ public class ApplicationTest {
     @Test
     public void testSayHelloWorld() throws Exception{
 
+		// test
     	Scr scr = repository.findOne(-1L);
     	//System.out.println("Object AVANT: " + scr.toString());
     	System.out.println("Object AVANT: " + scr.getScrTxt().length());
@@ -66,6 +68,7 @@ public class ApplicationTest {
     	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");
     	scr = repository.save(scr);
     	//System.out.println("Object APRES: " + scr.toString());
+    	// end
     }
 
     @Test
