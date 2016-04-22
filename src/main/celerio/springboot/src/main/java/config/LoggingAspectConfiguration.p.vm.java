@@ -1,6 +1,6 @@
-$output.java("${configuration.rootPackage}.config", "LoggingAspectConfiguration")##
+$output.java("${Root.packageName}.config", "LoggingAspectConfiguration")##
 
-$output.require("com.jaxio.demo.aop.LoggingAspect")##
+$output.require("${Root.packageName}.aop.LoggingAspect")##
 $output.require("org.springframework.context.annotation.*")##
 
 /**

@@ -10,8 +10,8 @@ $output.require("org.springframework.test.context.web.WebAppConfiguration")##
 $output.require("org.springframework.beans.factory.annotation.Autowired")##
 $output.require("org.springframework.beans.factory.annotation.Value")##
 
-$output.require("com.jaxio.demo.domain.Scr")##
-$output.require("com.jaxio.demo.repository.ScrRepository")##
+$output.require($project.getEntityByName("Scr").model)##
+$output.require($project.getEntityByName("Scr").repository)##
 
 $output.require("org.junit.After")##
 $output.require("org.junit.Before")##
@@ -51,11 +51,11 @@ public class ApplicationTests {
     @Test
     public void testSayHelloWorld() throws Exception{
 
-    	Scr scr = repository.findOne(-1);
-    	System.out.println("Object AVANT: " + scr.getScrTxt().length());
-    	
-    	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");
-    	scr = repository.save(scr);
+    	Scr scr = repository.findOne(-1L);
+        System.out.println("Object AVANT: " + scr.getScrCat().length());
+
+        scr.setScrTxt(scr.getScrCat() + "\r\n<!--CLOB-->");
+        scr = repository.save(scr);
     }
 
     @Test

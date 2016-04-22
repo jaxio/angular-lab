@@ -104,7 +104,7 @@ CREATE TABLE BOOK_STORE (
 );
 
 CREATE TABLE SCR (	
-	SCR_IDE int not null, 
+	SCR_IDE int8 not null,
 	SCR_CAT VARCHAR(50), 
 	SCR_TXT CLOB, 
 	SCR_AVL int, 

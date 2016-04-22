@@ -12,9 +12,9 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 ##
-$output.java("${configuration.rootPackage}.domain.util", "JSR310PersistenceConverters")##
+$output.java("${Model.packageName}.util", "JSR310PersistenceConverters")##
 
-import com.jaxio.demo.domain.util.JSR310DateConverters.*;
+import ${Model.packageName}.util.JSR310DateConverters.*;
 
 import java.time.*;
 import java.util.Date;

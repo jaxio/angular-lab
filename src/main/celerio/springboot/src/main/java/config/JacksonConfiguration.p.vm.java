@@ -1,6 +1,6 @@
 $output.java("${configuration.rootPackage}.config", "JacksonConfiguration")##
 
-$output.require("com.jaxio.demo.domain.util.*")##
+$output.require("${Model.packageName}.util.*")##
 
 $output.require("com.fasterxml.jackson.databind.SerializationFeature")##
 $output.require("com.fasterxml.jackson.datatype.jsr310.JavaTimeModule")##
