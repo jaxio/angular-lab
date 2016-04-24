@@ -60,7 +60,6 @@ public class ApplicationTest {
     @Test
     public void testSayHelloWorld() throws Exception{
 
-    	// test
     	Scr scr = repository.findOne(-1L);
         System.out.println("Object AVANT: " + scr.getScrCat().length());
 
