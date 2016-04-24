@@ -11,7 +11,7 @@ app.controller("${entity.model.type}CreateController", ["${dollar}scope", "${dol
 	#end 
 #end
 #end
-		"${dollar}alert", "${dollar}timeout", function(scope, window, aside, log, 
+		"${dollar}alert", "${dollar}timeout", "mode", function(scope, window, aside, log, 
 		${entity.model.var}RestService, 
 #foreach ($attribute in $entity.allAttributes.list)
 	#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))
@@ -22,8 +22,11 @@ app.controller("${entity.model.type}CreateController", ["${dollar}scope", "${dol
 		#end 
 	#end
 #end		
-		alertService, timeoutService) {
+		alertService, timeoutService, mode) {
 
+	log.info("inside ${entity.model.type}EditController, mode: " + mode);
+	scope.mode = mode;
+		
 #foreach ($attribute in $entity.allAttributes.list)
 	#if ($attribute.isInFk() || ($attribute.isInCpk() == true && $attribute.isSimpleFk() == true))		
 		#if ($attribute.getXToOneRelation().isManyToOne())
@@ -51,7 +54,7 @@ ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.ge
 				
 				var userALert = alertService({
 		                    title: "SUCCESS:",
-		                    content: '<BR>Your ${entity.model.var} have been <i>created or updated</i>. You can find it int the result table. See <a href="#"><B>older messages</B></a> !',
+		                    content: '<BR>Your ${entity.model.var} have been <i>created or updated</i>. You can find it in the result table. See <a href="#"><B>older messages</B></a> !',
 		                    placement: "top-right",
 		                    type: "theme",
 		                    container: ".alert-container-top-right",
@@ -92,7 +95,7 @@ ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.ge
 			${entity.model.var}RestService.update(scope.item, onSaveSuccess, onSaveError);
 		} else {
 			// creation mode
-			${entity.model.var}RestService.save(scope.item, onSaveSuccess, onSaveError);
+			${entity.model.var}RestService.create(scope.item, onSaveSuccess, onSaveError);
 		}
 	};
 

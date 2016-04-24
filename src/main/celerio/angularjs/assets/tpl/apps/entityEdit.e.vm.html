@@ -50,13 +50,13 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 				## we have to deal with simple field       
 				
 				#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger")
-					<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag ng-pattern="/^\d{0,18}(\.\d{1,2})?$/" ng-disabled="mode != 'EDIT'">  
+					<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag ng-pattern="/^\d{0,18}(\.\d{1,2})?$/" ng-disabled="mode == 'VIEW'">  
 				#else  
-               		<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag ng-disabled="mode != 'EDIT'">
+               		<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag ng-disabled="mode == 'VIEW'">
                	#end
             #end          
 		#elseif ($attribute.type == "Date")
-			<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" data-autoclose="1" bs-datepicker ng-disabled="mode != 'EDIT'">
+			<input type="text" class="form-control" id="${attribute.var}" ng-model="item.${attribute.var}" data-autoclose="1" bs-datepicker ng-disabled="mode == 'VIEW'">
 		#else
         	<p>Type [$attribute.type] not implemented yet !!!!</p>
         #end
@@ -144,8 +144,8 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
             <div class="form-group">
               <div class="col-lg-10 col-lg-offset-2">
               	<button type="submit" class="btn btn-primary" ui-sref="$entity.name.toLowerCase()">back to List</button>
-                <button type="reset" class="btn btn-default" ng-click="remove(item)" ng-show="mode == 'EDIT'">Delete</button>
-                <button type="submit" class="btn btn-primary" ng-click="saveItem(item)" ng-show="mode == 'EDIT'">Save</button>
+                <button type="reset" class="btn btn-default" ng-click="remove(item)" ng-show="mode != 'VIEW'">Delete</button>
+                <button type="submit" class="btn btn-primary" ng-click="saveItem(item)" ng-show="mode != 'VIEW'">Save</button>
               </div>
             </div>
 
