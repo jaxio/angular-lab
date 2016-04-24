@@ -98,11 +98,11 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
 #end
 ## --------------- One to one: value inside the table
 #foreach ($relation in $entity.oneToOne.list)
-		  <td><a ui-sref="edit${relation.to.varUp}()">{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</a></td>
+		  <td><a ui-sref="edit${relation.to.type}(#if ((${relation.toEntity.hasSimplePk()})) {id:item.${relation.to.var}.${relation.toEntity.getPrimaryKey().getAttribute().name}} #else <!-- FIXME --> #end)">{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</a></td>
 #end
 ## --------------- Many to one
 #foreach ($relation in $entity.manyToOne.list)
-		  <td><a ui-sref="edit${relation.to.varUp}()">{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</a></td>
+		  <td><a ui-sref="edit${relation.to.type}(#if ((${relation.toEntity.hasSimplePk()})) {id:item.${relation.to.var}.${relation.toEntity.getPrimaryKey().getAttribute().name}} #else <!-- FIXME --> #end)">{{item.${relation.to.var}.$relation.toEntity.getNotInPkAttributes().getFirst().getName()}}</a></td>
 #end		
             <td class="text-right" ng-click="${dollar}event.stopPropagation()">
               <button type="button" class="btn btn-link btn-round" data-title="{{ 'EDIT_ITEM' | translate }}" ui-sref="edit${entity.model.type}(#if (($entity.hasSimplePk())) {id:item.id} #else $str8 #end)" bs-tooltip><i class="md md-edit"></i></button>
