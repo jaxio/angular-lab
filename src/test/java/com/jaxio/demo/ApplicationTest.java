@@ -62,13 +62,12 @@ public class ApplicationTest {
 
 		// test
     	Scr scr = repository.findOne(-1L);
-    	//System.out.println("Object AVANT: " + scr.toString());
-    	System.out.println("Object AVANT: " + scr.getScrTxt().length());
-    	
-    	scr.setScrTxt(scr.getScrTxt() + "\r\n<!--CLOB-->");
-    	scr = repository.save(scr);
-    	//System.out.println("Object APRES: " + scr.toString());
-    	// end
+        System.out.println("Object AVANT: " + scr.getScrCat().length());
+
+        scr.setScrCat(scr.getScrCat() + "\r\n<!--CLOB-->");
+        scr = repository.save(scr);
+        //System.out.println("Object APRES: " + scr.toString());
+        // end
     }
 
     @Test

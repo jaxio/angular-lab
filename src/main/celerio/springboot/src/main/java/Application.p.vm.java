@@ -11,8 +11,8 @@ $output.require("org.springframework.boot.context.properties.EnableConfiguration
 $output.require("${configuration.rootPackage}.config.ApplicationProperties")##
 
 @SpringBootApplication
-@EnableJpaRepositories("com.jaxio.demo.repository")
-@EnableElasticsearchRepositories("com.jaxio.demo.repository.search")
+@EnableJpaRepositories("$Repository.packageName")
+@EnableElasticsearchRepositories("${Repository.packageName}.search")
 @EnableConfigurationProperties({ ApplicationProperties.class}) 
 public class Application {
 
