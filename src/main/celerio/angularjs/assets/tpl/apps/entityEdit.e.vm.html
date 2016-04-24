@@ -70,7 +70,8 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 #foreach ($oneToOne in $entity.oneToOne.list)
 	<div class="form-group filled">
 	
-            <label class="col-lg-2 control-label">${oneToOne.to.type}</label>
+            <label class="col-lg-2 control-label">
+            <a ui-sref="edit${oneToOne.to.type}(#if ((${oneToOne.toEntity.hasSimplePk()})) {id:item.${oneToOne.to.var}.${oneToOne.toEntity.getPrimaryKey().getAttribute().name}} #else <!-- FIXME --> #end)">${oneToOne.to.type}</a></label>
             <div class="col-lg-10">     	
             <ui-select ng-model="item.$oneToOne.to.var" theme="select2" title="Choose an $oneToOne.to.var" search-enabled="false">
 #foreach ($toAttribute in $oneToOne.getToEntity().getAttributes().list)  
@@ -99,7 +100,8 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 #foreach ($manyToOne in $entity.manyToOne.list)
 	<div class="form-group filled">
 	
-            <label class="col-lg-2 control-label"><a ui-sref="edit${manyToOne.getToEntity().model.type}({id:1})">${manyToOne.to.type}</a></label>
+            <label class="col-lg-2 control-label">
+            <a ui-sref="edit${manyToOne.to.type}(#if ((${manyToOne.toEntity.hasSimplePk()})) {id:item.${manyToOne.to.var}.${manyToOne.toEntity.getPrimaryKey().getAttribute().name}} #else <!-- FIXME --> #end)">${manyToOne.to.type}</a></label>
             <div class="col-lg-10">     	
             <ui-select ng-model="item.$manyToOne.to.var" theme="select2" title="Choose an $manyToOne.to.var" search-enabled="false">
 #foreach ($toAttribute in $manyToOne.getToEntity().getAttributes().list)  
