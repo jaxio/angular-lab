@@ -274,6 +274,49 @@ public class $output.currentClass{
 #end
     }
     
+    /**
+     * Count $entity.model.type.
+     * FIXME: this method should be asynchronous because it can take times to count all records !
+     */
+    @RequestMapping(value = "/count",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> count() throws URISyntaxException {
+        log.debug("Count $entity.model.vars");
+        long count = ${entity.model.var}Repository.count();
+        
+        return new ResponseEntity<>(count, new HttpHeaders(), HttpStatus.OK);
+    }
+
+#if (($entity.hasSimplePk()))
+    /**
+     * Check if a $entity.model.type exists via its id.
+     */
+    @RequestMapping(value = "/exists/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> exists(@PathVariable $entity.primaryKey.type $entity.primaryKey.var) throws URISyntaxException {
+    	log.debug("Check $entity.model.var existence via its id: {}.", id);
+    	Boolean exists = ${entity.model.var}Repository.exists(id);
+        
+        return new ResponseEntity<>(exists, new HttpHeaders(), HttpStatus.OK);
+    }
+#else
+	/**
+     * Check if a $entity.model.type exists via its composite id.
+     */
+    @RequestMapping(value = "/exists/$str1",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> exists($str3) throws URISyntaxException {
+		$entity.primaryKey.type $entity.primaryKey.var = new ${entity.primaryKey.type}($str4);
+    	log.debug("Check $entity.model.var existence via its id: {}.", $entity.primaryKey.var);
+    	Boolean exists = ${entity.model.var}Repository.exists($entity.primaryKey.var);
+        
+        return new ResponseEntity<>(exists, new HttpHeaders(), HttpStatus.OK);
+    }
+#end	
+
 ## --------------- One to One
 #foreach ($oneToOne in $entity.oneToOne.list)
 $output.require("${oneToOne.to.getPackageName()}.$oneToOne.to.type")##
