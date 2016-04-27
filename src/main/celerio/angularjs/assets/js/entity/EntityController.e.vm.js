@@ -170,14 +170,16 @@ scope.searchItem = function() {
 
 /** Executes the classical search on the server side */
 scope.startSearch = function(item) {
-	log.info("startSearch: " + scope.item);
+	log.info("startSearch, criteria: " + scope.item);
 
-	// get criteria
-
-	// call search on the server side
-
-
-	// refresh the grid
+	// call search on the server side and refresh the grid
+	${entity.model.var}RestService.search(item, function success(result){
+		log.info("receiving info from server side");
+		
+		// refresh data and so the grid
+		scope.data = result;
+		log.info("data post refresh:" + result);
+	});
 	
 	// close the search aside
 	hideForm(searchAside);
@@ -466,7 +468,13 @@ app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 		},
 		'create': { method:'POST', url: 'api/${entity.model.vars}/$str6'},
 		'update': { method:'PUT', url: 'api/${entity.model.vars}/$str6'},
-		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' }
+		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' },
+		'search': { method: 'POST', url: 'api/${entity.model.vars}/search/', isArray: true,  
+			transformResponse: function (data) {
+				data = angular.fromJson(data);
+				return data;
+			}
+		}
 ## dedicated method for system entities
 #if ($entity.model.type == "AppParameter")
 		,'getParameter': {method: 'GET',
@@ -482,7 +490,7 @@ app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 
 /** REST client for managing Elastic search calls on ${entity.model.type} entity */
 app.factory('${entity.model.type}RestSearchService', function (${dollar}resource) {
-	return ${dollar}resource('api/${entity.model.vars}/search/:query', {}, {
+	return ${dollar}resource('api/${entity.model.vars}/esearch/:query', {}, {
 		'query': { method: 'GET', isArray: true}
 	});
 });

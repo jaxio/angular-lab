@@ -261,7 +261,7 @@ public class $output.currentClass{
     /**
      * Search with ElasticSearch.
      */
-    @RequestMapping(value = "/search/{query}",
+    @RequestMapping(value = "/esearch/{query}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public List<$entity.model.type> search${entity.model.type}s(@PathVariable String query) {
@@ -365,21 +365,21 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
 	}
 #end
 
-#if ($entity.model.type == "Book")
     /**
      * Search books (Prototype).
      */
     @RequestMapping(value = "/search",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Book>> search(@RequestBody Book book, Pageable pageable) throws URISyntaxException {
-        log.debug("Search books, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
-        log.debug("book: " + book);
-        List<Book> books = bookRepository.search(book.getTitle() + "%", book.getDescription() + "%", book.getPrice());
-        //log.debug("There are " + page.getTotalElements() + " books.");
-        return new ResponseEntity<>(books, new HttpHeaders(), HttpStatus.OK);
+    public ResponseEntity<List<$entity.model.type>> search(@RequestBody $entity.model.type $entity.model.var, Pageable pageable) throws URISyntaxException {
+        log.debug("Search $entity.model.vars, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
+        log.debug("$entity.model.var: " + $entity.model.var);
+        
+        // FIXME to be continued
+        List<$entity.model.type> $entity.model.vars = ${entity.model.var}Repository.findAll();
+        
+        return new ResponseEntity<>($entity.model.vars, new HttpHeaders(), HttpStatus.OK);
     }
-#end
 
 ## dedicated method for system entities
 #if ($entity.model.type == "AppParameter")

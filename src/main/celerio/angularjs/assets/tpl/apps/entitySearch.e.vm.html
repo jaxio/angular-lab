@@ -19,7 +19,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Search
         #if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger")
         	<input type="text" class="form-control" ng-model="item.${attribute.var}" ng-disabled="!item.editing">
     	#elseif ($attribute.type == "String")
-            <input type="text" class="form-control" ng-model="item.${attribute.var}" ng-disabled="!item.editing" required>
+            <input type="text" class="form-control" ng-model="item.${attribute.var}" ng-disabled="!item.editing">
         #elseif ($attribute.type == "Date")
         	<input type="text" class="form-control" ng-model="item.${attribute.var}" data-autoclose="1" placeholder="{{ '${attribute.name}' | translate }}"
                            bs-datepicker ng-disabled="!item.editing">
