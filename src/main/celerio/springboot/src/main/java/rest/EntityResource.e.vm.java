@@ -52,6 +52,10 @@ $output.require("static org.elasticsearch.index.query.QueryBuilders.queryStringQ
 $output.require("java.util.stream.Collectors")##
 $output.require("java.util.stream.StreamSupport")##
 #end
+$output.require("org.springframework.jdbc.core.JdbcTemplate")##
+$output.require("java.util.ArrayList")##
+$output.require("org.springframework.jdbc.core.BeanPropertyRowMapper")##
+$output.require("org.springframework.beans.factory.annotation.Autowired")##
 
 @RestController
 @RequestMapping("/api/${entity.model.vars}")
@@ -62,6 +66,9 @@ public class $output.currentClass{
     @Inject
     private $entity.repository.type $entity.repository.var;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    
 #if (($entity.hasSimplePk()))
     @Inject
     private ${entity.model.type}SearchRepository ${entity.model.var}SearchRepository;
@@ -366,7 +373,7 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
 #end
 
     /**
-     * Search books (Prototype).
+     * Search $entity.model.vars.
      */
     @RequestMapping(value = "/search",
             method = RequestMethod.POST,
@@ -375,8 +382,33 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
         log.debug("Search $entity.model.vars, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
         log.debug("$entity.model.var: " + $entity.model.var);
         
-        // FIXME to be continued
-        List<$entity.model.type> $entity.model.vars = ${entity.model.var}Repository.findAll();
+        // FIXME replace second * by column names
+        String sqlMainPart = "select * from (select * from $entity.getTableName() where 1=1"; 
+        String sqlSecondaryPart = "";
+        
+        List<Object> values = new ArrayList<Object>();
+        
+#foreach ($attribute in $entity.attributes.list)
+	#if (!$attribute.isInFk() && !$attribute.isInCpk())
+		if (${entity.model.var}.get${attribute.varUp}() != null) {
+			#if ($attribute.isString())
+				sqlSecondaryPart += " and upper($attribute.var) like ? ";
+				values.add(${entity.model.var}.get${attribute.varUp}().toUpperCase() + "%");
+			#else
+				sqlSecondaryPart += " and $attribute.var = ? ";
+				values.add(${entity.model.var}.get${attribute.varUp}());
+			#end			
+		}
+	#end
+#end
+        
+        sqlSecondaryPart += ") where rownum <= ?";
+        values.add(pageable.getPageSize());
+        
+        log.debug("SQL: " + sqlMainPart + " " + sqlSecondaryPart);
+        List<$entity.model.type> $entity.model.vars = jdbcTemplate.query(sqlMainPart + " " + sqlSecondaryPart, 
+        		values.toArray(), 
+        		new BeanPropertyRowMapper<$entity.model.type>(${entity.model.type}.class));
         
         return new ResponseEntity<>($entity.model.vars, new HttpHeaders(), HttpStatus.OK);
     }
