@@ -60,6 +60,9 @@ scope.pagination = {};
 scope.totalElementsPerPage = 20;
 scope.busy = false;
 
+// saved search
+scope.savedSearch = {};
+
 // checkbox in the grid header
 scope.selectAll = false;
 
@@ -154,6 +157,12 @@ scope.clear = function () {
 	log.info("call method clear inside ${entity.model.type}Controller");
 	log.info(scope.data.length);
 	scope.data = [];
+};
+
+/** clear saved search */
+scope.clearSavedSearch = function () {
+	log.info("call method clearSavedSearch inside ${entity.model.type}Controller");
+	scope.savedSearch = {};
 };
 
 /** Shows search aside */
