@@ -143,7 +143,8 @@ public class $output.currentClass{
 #set ($str7 = "")
 #set ($str8 = "")
 #set ($str9 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
+#set ($str10 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $str10 $entity.attributes.list)
 #if (($entity.hasSimplePk()))
     /**
      * Find by id $entity.model.type (for simple key).
@@ -375,6 +376,7 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
     /**
      * Search $entity.model.vars.
      */
+// FIXME must return a Page like in method findAllByPage
     @RequestMapping(value = "/search",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -382,8 +384,7 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
         log.debug("Search $entity.model.vars, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
         log.debug("$entity.model.var: " + $entity.model.var);
         
-        // FIXME replace second * by column names
-        String sqlMainPart = "select * from (select * from $entity.getTableName() where 1=1"; 
+        String sqlMainPart = "select * from (select $str10 from $entity.getTableName() where 1=1"; 
         String sqlSecondaryPart = "";
         
         List<Object> values = new ArrayList<Object>();

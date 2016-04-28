@@ -11,9 +11,10 @@ $output.webapp("assets\js", "applicationStates.js")##
 ## str7: {{item.id.keyPart1}}:{{item.id.keyPart2}}
 ## str8: {keyPart1: item.id.keyPart1, keyPart2: item.id.keyPart2}
 ## str9: { "column1": true, "column2": true, ... }
+## str10: column1, column2, ... 
 #########################################################################################
 ##
-## Be careful: this method is call several times; be sure to change all calls when you add a parameter
+## Be careful: this method below is call several times; be sure to change all calls when you add a parameter
 ## calls: 
 ##			3 inside this file
 ##			1 in EntityController.e.vm.js
@@ -23,7 +24,7 @@ $output.webapp("assets\js", "applicationStates.js")##
 ##			1 in EntityResource.e.vm.java
 ##	
 ##
-#macro(generateSimpleOrCompositeKeyForURL $str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $list)
+#macro(generateSimpleOrCompositeKeyForURL $str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $str10 $list)
 #set ($compositeCall = false) 
 	#foreach ($attribute in $list)
 		#if ($attribute.isInCpk() == true)
@@ -51,8 +52,10 @@ $output.webapp("assets\js", "applicationStates.js")##
 		
 		#if ($str9 == "") 
 			#set ($str9 = "{ \"$attribute.name\": true")
+			#set ($str10 = "$attribute.name")
 		#else
 			#set ($str9 = "$str9, \"$attribute.name\": true")
+			#set ($str10 = "$str10, $attribute.name")
 		#end
 	#end
 	
@@ -121,7 +124,8 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 #set ($str7 = "")
 #set ($str8 = "")
 #set ($str9 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
+#set ($str10 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $str10 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('$entity.name.toLowerCase()', {
 	    	url: "/$entity.name.toLowerCase()",
@@ -153,7 +157,8 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 #set ($str7 = "")
 #set ($str8 = "")
 #set ($str9 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
+#set ($str10 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $str10 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('edit${entity.name}', {
 			url: "/${entity.name.toLowerCase()}/${str1}",
@@ -183,7 +188,8 @@ app.config(function(${dollar}stateProvider, ${dollar}urlRouterProvider) {
 #set ($str7 = "")
 #set ($str8 = "")
 #set ($str9 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $entity.attributes.list)
+#set ($str10 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $str10 $entity.attributes.list)
 	${dollar}stateProvider
 		.state('view${entity.name}', {
 			url: "/${entity.name.toLowerCase()}/view/${str1}",

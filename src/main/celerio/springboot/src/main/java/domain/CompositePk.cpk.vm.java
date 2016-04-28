@@ -46,7 +46,8 @@ $output.require($attribute)##
 #set ($str7 = "")
 #set ($str8 = "")
 #set ($str9 = "")
-#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $primaryKey.entity.attributes.list)    
+#set ($str10 = "")
+#generateSimpleOrCompositeKeyForURL($str1 $str2 $str3 $str4 $str5 $str6 $str7 $str8 $str9 $str10 $primaryKey.entity.attributes.list)    
     /**
      * Constructor with each part of the composite key as a parameter.
      */
