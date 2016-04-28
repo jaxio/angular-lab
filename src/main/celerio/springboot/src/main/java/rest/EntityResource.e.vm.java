@@ -56,6 +56,7 @@ $output.require("org.springframework.jdbc.core.JdbcTemplate")##
 $output.require("java.util.ArrayList")##
 $output.require("org.springframework.jdbc.core.BeanPropertyRowMapper")##
 $output.require("org.springframework.beans.factory.annotation.Autowired")##
+$output.require("org.springframework.data.domain.PageImpl")##
 
 @RestController
 @RequestMapping("/api/${entity.model.vars}")
@@ -376,13 +377,14 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
     /**
      * Search $entity.model.vars.
      */
-// FIXME must return a Page like in method findAllByPage
     @RequestMapping(value = "/search",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<$entity.model.type>> search(@RequestBody $entity.model.type $entity.model.var, Pageable pageable) throws URISyntaxException {
+    public Page<$entity.model.type> search(@RequestBody $entity.model.type $entity.model.var, Pageable pageable) throws URISyntaxException {
         log.debug("Search $entity.model.vars, page: " + pageable.getPageNumber() + ", size: " + pageable.getPageSize());
         log.debug("$entity.model.var: " + $entity.model.var);
+        
+        long total = ${entity.model.var}Repository.count();
         
         String sqlMainPart = "select * from (select $str10 from $entity.getTableName() where 1=1"; 
         String sqlSecondaryPart = "";
@@ -411,7 +413,9 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
         		values.toArray(), 
         		new BeanPropertyRowMapper<$entity.model.type>(${entity.model.type}.class));
         
-        return new ResponseEntity<>($entity.model.vars, new HttpHeaders(), HttpStatus.OK);
+        Page<$entity.model.type> page = new PageImpl<$entity.model.type>($entity.model.vars, pageable, total);
+        
+        return page;
     }
 
 ## dedicated method for system entities

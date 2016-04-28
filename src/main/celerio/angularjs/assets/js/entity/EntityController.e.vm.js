@@ -113,6 +113,32 @@ scope.refreshByPage = function (page, size, addMode) {
 	scope.selectAll = false;
 };
 
+/** Executes the search with criteria on the server side */
+scope.startSearch = function(item) {
+	log.info("startSearch, criteria: " + scope.item);
+
+	// call search on the server side and refresh the grid
+	${entity.model.var}RestService.search(item, function success(result){
+		log.info("receiving info from server side");
+		
+		// refresh data and so the grid
+		scope.data = result.content;
+		
+		// fill pagination variables
+		scope.pagination.first = result.first;
+		scope.pagination.last = result.last;
+		scope.pagination.totalElements = result.totalElements;
+		scope.pagination.totalPages = result.totalPages;
+		scope.pagination.number = result.number;
+		
+		log.info("data post refresh:" + scope.data.length);
+		log.info("page number: " + scope.pagination.number);
+	});
+	
+	// close the search aside
+	hideForm(searchAside);
+};
+
 /** Gets first page */
 scope.first = function () {
 	log.info("call method first inside ${entity.model.type}Controller for page: 0");
@@ -175,23 +201,6 @@ scope.searchItem = function() {
 	scope.item = b, scope.settings.cmd = "Search", scope.item.title='todo';
 	
 	showForm(searchAside);
-};
-
-/** Executes the classical search on the server side */
-scope.startSearch = function(item) {
-	log.info("startSearch, criteria: " + scope.item);
-
-	// call search on the server side and refresh the grid
-	${entity.model.var}RestService.search(item, function success(result){
-		log.info("receiving info from server side");
-		
-		// refresh data and so the grid
-		scope.data = result;
-		log.info("data post refresh:" + result);
-	});
-	
-	// close the search aside
-	hideForm(searchAside);
 };
 
 /** Executes the Elastic search on the server side */
@@ -479,12 +488,7 @@ app.factory('${entity.model.type}RestService', function (${dollar}resource) {
 		'create': { method:'POST', url: 'api/${entity.model.vars}/$str6'},
 		'update': { method:'PUT', url: 'api/${entity.model.vars}/$str6'},
 		'delete': { method:'DELETE', url: 'api/${entity.model.vars}/$str6' },
-		'search': { method: 'POST', url: 'api/${entity.model.vars}/search/', isArray: true,  
-			transformResponse: function (data) {
-				data = angular.fromJson(data);
-				return data;
-			}
-		}
+		'search': { method: 'POST', url: 'api/${entity.model.vars}/search/', isArray: false}
 ## dedicated method for system entities
 #if ($entity.model.type == "AppParameter")
 		,'getParameter': {method: 'GET',
