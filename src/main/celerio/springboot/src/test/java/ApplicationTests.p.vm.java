@@ -19,6 +19,10 @@ $output.require("org.springframework.web.context.WebApplicationContext")##
 $output.require("org.springframework.test.web.servlet.MockMvc")##
 $output.require("org.springframework.test.web.servlet.setup.MockMvcBuilders")##
 
+$output.require("com.jaxio.demo.config.ApplicationProperties")##
+$output.require("org.junit.Assert")##
+$output.require("javax.inject.Inject")##
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -27,7 +31,10 @@ public class ApplicationTests {
 
 	@Value("${dollar}{local.server.port}")   
     int port;
-	
+
+    @Inject
+    private ApplicationProperties applicationProperties;
+    
 	@Autowired
 	ScrRepository repository;
 	
@@ -57,7 +64,12 @@ public class ApplicationTests {
         scr.setScrTxt(scr.getScrCat() + "\r\n<!--CLOB-->");
         scr = repository.save(scr);
     }
-
+    
+    @Test
+    public void testProperties() throws Exception {
+    	Assert.assertNotNull(applicationProperties.getMail().getFrom());
+    }
+    
     @Test
     public void contextLoads() {
     }

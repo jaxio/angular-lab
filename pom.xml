@@ -88,6 +88,8 @@
         <hibernate.ehcache.configuration.file>ehcache.xml</hibernate.ehcache.configuration.file>
         <hibernate.use.second.level.cache>false</hibernate.use.second.level.cache>
         <hibernate.use.query.cache>false</hibernate.use.query.cache>
+        
+        <!--spring-data-releasetrain.version>Hopper-SR1</spring-data-releasetrain.version-->
     </properties>
 
     <dependencies>
@@ -154,6 +156,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+		<!-- for sending mail -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        
+        <!-- for email templates -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <dependency>

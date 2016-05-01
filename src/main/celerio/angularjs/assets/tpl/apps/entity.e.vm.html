@@ -74,6 +74,11 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}.html"
         </tr>
         </thead>
         <tbody>
+        
+          <tr ng-show="data.length == 0">
+            <td colspan="1" align="center"><a ng-click="searchItem()">{{ 'NO_DATA' | translate }}</a></td>
+          </tr>        
+        
           <tr ng-repeat="(key, item) in data" ng-click="item.selected=!item.selected"  ng-dblclick="editItem(item)">
             <td><input type="checkbox" class="relative" ng-model="item.selected" ng-click="${dollar}event.stopPropagation()" /></td>
             <td ng-bind-html="item.icon" class="f20"></td>

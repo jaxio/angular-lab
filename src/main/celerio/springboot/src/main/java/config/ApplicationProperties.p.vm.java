@@ -13,11 +13,17 @@ $output.require("org.springframework.boot.context.properties.ConfigurationProper
 public class ApplicationProperties {
 
     private final Async async = new Async();
+    
+    private final Mail mail = new Mail();
 
     public Async getAsync() {
         return async;
     }
     
+    public Mail getMail() {
+        return mail;
+    }
+
     /**
      * Properties linked to Spring Boot asynchronous engine.
      *
@@ -52,6 +58,20 @@ public class ApplicationProperties {
 
         public void setQueueCapacity(int queueCapacity) {
             this.queueCapacity = queueCapacity;
+        }
+    }
+    
+    public static class Mail {
+
+    	// FIXME: hard coded
+        private String from = "application@localhost";
+
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
         }
     }
 }

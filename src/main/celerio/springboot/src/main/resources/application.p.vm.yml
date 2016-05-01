@@ -58,8 +58,13 @@ spring:
                   enabled: true             
     mail:
         host: localhost
+        port: 25
+        username: 
+        password: 
     messages:
         cache-seconds: 1
+    thymeleaf:
+        cache: true
 
 server:
     port: @application.port@
@@ -70,5 +75,6 @@ server:
 application:
     async:
         corePoolSize: 1
-
+    mail:
+        from: application@localhost.fr
     

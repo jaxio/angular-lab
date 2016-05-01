@@ -38,6 +38,7 @@ app.config(['${dollar}translateProvider', function (${dollar}translateProvider) 
       	'MORE_TOOLTIP': 'Click here to see more',
       	'MORE': 'More',
       	'LESS': 'Less',
+      	'NO_DATA': 'There isn\'t record for this entity !',
       	
       	// menu
       	'MENU_ENTITIES': 'Entities',

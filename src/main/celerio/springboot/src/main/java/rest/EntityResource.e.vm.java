@@ -57,6 +57,7 @@ $output.require("java.util.ArrayList")##
 $output.require("org.springframework.jdbc.core.BeanPropertyRowMapper")##
 $output.require("org.springframework.beans.factory.annotation.Autowired")##
 $output.require("org.springframework.data.domain.PageImpl")##
+$output.require("org.springframework.data.domain.PageRequest")##
 
 @RestController
 @RequestMapping("/api/${entity.model.vars}")
@@ -261,9 +262,28 @@ public class $output.currentClass{
             produces = MediaType.APPLICATION_JSON_VALUE)
 	@Async
     public void indexAll${entity.model.varsUp}() {
-    	log.debug("REST request to index all $entity.model.varsUp");
+    	log.debug("REST request to index all $entity.model.varsUp, START");
 #if (($entity.hasSimplePk()))
     	${entity.model.var}Repository.findAll().forEach(p -> {log.debug("indexing");${entity.model.var}SearchRepository.index(p);});
+    	
+    	PageRequest request = new PageRequest(0, 1000);
+        try {
+        	Page<$entity.model.type> page = findAllByPage(request);
+        	page.forEach(p -> ${entity.model.var}SearchRepository.index(p));
+                         
+             while (page.hasNext()) {
+                    request = new PageRequest(request.getPageNumber() + 1, 1000);
+                    
+                    log.debug("we are indexing page: " + (request.getPageNumber() + 1));
+                    
+                    page = findAllByPage(request);
+                    page.forEach(p -> ${entity.model.var}SearchRepository.index(p));
+              }
+        } catch (Exception e) {
+        	log.error("", e);
+        }
+
+        log.debug("REST request to index all $entity.model.varsUp, EXIT");
 #end    	
     }
     
