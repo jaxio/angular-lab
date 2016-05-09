@@ -222,7 +222,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
 	#foreach ($rel in $entityP.getRelations().list)
 		#if ($entity == $rel.getToEntity())
 			#if ($rel.getKind() == "many-to-one" || $rel.getKind() == "many-to-many" || $rel.getKind() == "one-to-one")
-				-- on a une relation MTO/OTO/MTM vers notre entite $entity, il faudra faire une table HTML contenant la liste des $entityP.name liés avec des liens pour y descendre
+				-- on a une relation $rel.getKind() (MTO/OTO/MTM) vers notre entite $entity, il faudra faire une table HTML contenant la liste des $entityP.name liés avec des liens pour y descendre
 				-- il faudra un REST sur les $entityP.name pour lister les $entityP.name liés à $entity
 				-- Exemple: ${entityP.name}.findBy${entity}ID
   <div class="card">
