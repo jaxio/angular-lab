@@ -573,13 +573,20 @@ app.factory('${entity.model.type}RestMassDeleteService', function (${dollar}reso
 	    })});
 #end
 
-## --------------- Inverse relation PROTOTYPE
+## --------------- Inverse relation
 /** REST client for managing inverse relation */
 app.factory('${entity.model.type}RestInvRelationService', function (${dollar}resource) {
 	return ${dollar}resource('api/void/:id', {}, {
-		'void': { method: 'GET'}
-#if (${entity.model.type} == "Author")		
-		,'findByAuthor': { method: 'GET', isArray: true, url: 'api/books/findByAuthor/:id'}
-#end		
+		'void': { method: 'GET'} /* dummy method, to be sure to have at least one */
+
+#foreach ($entityP in $project.getEntities().list)
+#foreach ($rel in $entityP.getRelations().list)
+#if ($entity == $rel.getToEntity())
+#if ($rel.getKind() == "many-to-one" || $rel.getKind() == "many-to-many" || $rel.getKind() == "one-to-one")
+        ,'find${entityP.model.type}By${entity}': { method: 'GET', isArray: true, url: 'api/${entityP.model.vars}/findBy${entity}/:id'}
+#end
+#end
+#end ## end foreach relation
+#end  ## end foreach entity
 	});
 });

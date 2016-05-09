@@ -347,6 +347,7 @@ public class $output.currentClass{
 #end	
 
 ## --------------- One to One
+#set( $MethodsHistoryMap = {}) ## Map
 #foreach ($oneToOne in $entity.oneToOne.list)
 $output.require("${oneToOne.to.getPackageName()}.$oneToOne.to.type")##
     /**
@@ -359,6 +360,7 @@ $output.require("${oneToOne.to.getPackageName()}.$oneToOne.to.type")##
     @RequestMapping(value = "/findBy${oneToOne.to.type}/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
+$!{MethodsHistoryMap.put("findBy${oneToOne.to.type}", "findBy${oneToOne.to.type}")}
     public ResponseEntity<List<$entity.model.type>> findBy${oneToOne.to.type}(@PathVariable $oneToOne.toEntity.primaryKey.type $oneToOne.toEntity.primaryKey.var) throws URISyntaxException {
         log.debug("Find $entity.model.varsUp by ${oneToOne.to.type} id : {}.", id);
         
@@ -379,10 +381,12 @@ $output.require("${manyToOne.to.getPackageName()}.$manyToOne.to.type")##
      * @param id id of the linked entity.
      * @return list of $entity.model.type
      * @throws URISyntaxException
+     * $MethodsHistoryMap.size()
      */
     @RequestMapping(value = "/findBy${manyToOne.to.type}/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
+$!{MethodsHistoryMap.put("findBy${manyToOne.to.type}", "findBy${manyToOne.to.type}")}
     public ResponseEntity<List<$entity.model.type>> findBy${manyToOne.to.type}(@PathVariable $manyToOne.toEntity.primaryKey.type $manyToOne.toEntity.primaryKey.var) throws URISyntaxException {
         log.debug("Find $entity.model.varsUp by ${manyToOne.to.type} id : {}.", id);
         

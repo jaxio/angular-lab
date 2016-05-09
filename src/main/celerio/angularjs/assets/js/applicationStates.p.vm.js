@@ -52,10 +52,10 @@ $output.webapp("assets\js", "applicationStates.js")##
 		
 		#if ($str9 == "") 
 			#set ($str9 = "{ \"$attribute.name\": true")
-			#set ($str10 = "$attribute.name")
+			#set ($str10 = "$attribute.getColumnName()")
 		#else
 			#set ($str9 = "$str9, \"$attribute.name\": true")
-			#set ($str10 = "$str10, $attribute.name")
+			#set ($str10 = "$str10, $attribute.getColumnName()")
 		#end
 	#end
 	

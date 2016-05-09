@@ -67,13 +67,19 @@ ${attribute.getEntityIPointTo().name.substring(0,1).toLowerCase()}${attribute.ge
 	#end
 #end		
 	
-## --------------- Inverse relation PROTOTYPE
-#if (${entity.model.type} == "Author")
-	${entity.model.var}RestInvRelationService.findByAuthor({id: item.id}, function(result) {
-		scope.findByAuthor = result;
-		log.info("data post refresh: " + scope.findByAuthor.length);
-	});
-#end	
+## --------------- Inverse relation
+#foreach ($entityP in $project.getEntities().list)
+#foreach ($rel in $entityP.getRelations().list)
+#if ($entity == $rel.getToEntity())
+#if ($rel.getKind() == "many-to-one" || $rel.getKind() == "many-to-many" || $rel.getKind() == "one-to-one")
+	${entity.model.var}RestInvRelationService.find${entityP.model.type}By${entity}({id: item.id}, function(result) {
+	    scope.find${entityP.model.type}By${entity} = result;
+	    log.info("inv. relation, ${entityP.model.type} data post refresh: " + scope.find${entityP.model.type}By${entity}.length);
+    });
+#end
+#end
+#end ## end foreach relation
+#end  ## end foreach entity
 
 	/** Clear item */
 	scope.clear = function () {
