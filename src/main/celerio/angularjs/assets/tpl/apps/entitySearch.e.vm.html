@@ -16,7 +16,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Search
 	#if (!$attribute.isInPk()  && !$attribute.isInFk())
 		<div class="form-group filled">
 		    <label class="control-label">$attribute.varUp</label>
-        #if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger")
+        #if ($attribute.type == "BigDecimal" || $attribute.type == "Boolean" || $attribute.type == "Double" || $attribute.type == "Integer" || $attribute.type == "BigInteger")
         	<input type="text" class="form-control" ng-model="savedSearch.${attribute.var}">
     	#elseif ($attribute.type == "String")
             <input type="text" class="form-control" ng-model="savedSearch.${attribute.var}">

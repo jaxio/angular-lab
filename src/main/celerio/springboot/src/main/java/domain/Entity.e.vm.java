@@ -2,7 +2,6 @@ $output.java($entity.model)##
 
 $output.require("java.util.logging.Logger")##
 $output.require("com.google.common.base.Objects")##
-$output.require("org.springframework.data.elasticsearch.annotations.Document")##
 
 #if($entity.hasComment())
 /**
@@ -39,7 +38,7 @@ $annotation
 $output.require("java.io.Serializable")##
 $output.require("com.jaxio.jpa.querybyexample.Identifiable")##
 // elastic search index must be lowercase
-@Document(indexName = "${entity.model.var.toLowerCase()}")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "${entity.model.var.toLowerCase()}")
 public#if ($output.isAbstract()) abstract#{end} class ${output.currentClass}${entity.spaceAndExtendsStatement} implements Identifiable<$entity.primaryKey.type>${entity.commaAndImplementedInterfaces}, Serializable {
 #else
 $output.require($entity.parent.model)##

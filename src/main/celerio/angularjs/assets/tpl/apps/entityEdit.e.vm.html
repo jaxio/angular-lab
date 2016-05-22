@@ -42,7 +42,7 @@ $output.webapp("assets/tpl/apps/${entity.model.var}", "${entity.model.var}Edit.h
             	<label for="name" class="col-lg-2 control-label">$attribute.varUp</label>
             #end
               <div class="col-lg-10">
-		#if ($attribute.type == "BigDecimal" || $attribute.type == "Integer" || $attribute.type == "BigInteger" || $attribute.type == "String")
+		#if ($attribute.type == "BigDecimal" || $attribute.type == "Boolean" || $attribute.type == "Double" || $attribute.type == "Integer" || $attribute.type == "BigInteger" || $attribute.type == "String")
 			## we have to deal with LOB field
 			#if ($attribute.mappedType == "M_CLOB")
 				<textarea class="form-control vertical" rows="3" id="${attribute.var}" ng-model="item.${attribute.var}" $requiredTag></textarea>
